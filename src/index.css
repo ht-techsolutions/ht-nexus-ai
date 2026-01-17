@@ -1,0 +1,322 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* HT NEXUS AI Design System - Cyber-Logistics Theme
+   Custom palette: #c8e2e1, #7fd8dc, #10879d, #04435c, #033048, #ec6216
+   All colors in HSL format
+*/
+
+@layer base {
+  :root {
+    /* Light mode - refined for premium logistics feel */
+    --background: 210 20% 98%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 189 82% 34%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 183 54% 68% / 0.1;
+    --secondary-foreground: 189 82% 34%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 22 86% 50%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 189 82% 34% / 0.1;
+    --input: 189 82% 34% / 0.1;
+    --ring: 189 82% 34%;
+
+    --radius: 1rem;
+
+    /* Custom brand colors */
+    --cyber-lightest: 178 27% 84%;
+    --cyber-light: 183 54% 68%;
+    --cyber-primary: 189 82% 34%;
+    --cyber-dark: 197 88% 19%;
+    --cyber-darkest: 201 90% 15%;
+    --cyber-accent: 22 86% 50%;
+
+    /* Glassmorphism Light */
+    --glass-bg: 0 0% 100% / 0.7;
+    --glass-border: 189 82% 34% / 0.1;
+
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    /* Deep navy background from palette */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Teal primary */
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    /* Orange accent from cyber-accent */
+    --accent: 22 86% 50%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+
+    /* Custom brand colors (same in dark) */
+    --cyber-lightest: 178 27% 84%;
+    --cyber-light: 183 54% 68%;
+    --cyber-primary: 189 82% 34%;
+    --cyber-dark: 197 88% 19%;
+    --cyber-darkest: 201 90% 15%;
+    --cyber-accent: 22 86% 50%;
+
+    /* Glassmorphism dark */
+    --glass-bg: 201 90% 10% / 0.7;
+    --glass-border: 183 54% 68% / 0.15;
+
+    --sidebar-background: 201 90% 12%;
+    --sidebar-foreground: 178 27% 90%;
+    --sidebar-primary: 183 54% 68%;
+    --sidebar-primary-foreground: 201 90% 12%;
+    --sidebar-accent: 197 88% 22%;
+    --sidebar-accent-foreground: 178 27% 90%;
+    --sidebar-border: 197 50% 25%;
+    --sidebar-ring: 183 54% 68%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border/20;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer utilities {
+
+  /* Glassmorphism utility - refined for premium look */
+  .glass {
+    @apply bg-white/70 dark:bg-cyber-darkest/70 backdrop-blur-xl border border-cyber-primary/10 dark:border-cyber-primary/20 shadow-lg shadow-cyber-primary/5;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-dark {
+    @apply bg-cyber-darkest/80 dark:bg-cyber-darkest/90 backdrop-blur-2xl border border-cyber-primary/20 shadow-2xl shadow-black/20;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .section-alternate {
+    @apply bg-cyber-primary/[0.03] dark:bg-white/[0.02];
+  }
+
+  /* Gradient text - strict Green -> Orange */
+  .gradient-text {
+    @apply bg-gradient-to-r from-cyber-light via-cyber-primary to-accent bg-clip-text text-transparent;
+  }
+
+  /* Border gradient utility */
+  .border-gradient {
+    border: 1px solid transparent;
+    background: linear-gradient(hsl(var(--background)), hsl(var(--background))) padding-box,
+      linear-gradient(135deg, hsl(var(--cyber-primary)), hsl(var(--accent))) border-box;
+    transition: all 0.4s ease;
+  }
+
+  /* Glow effects */
+  .glow-primary {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.4),
+      0 0 40px hsl(var(--primary) / 0.2);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 20px hsl(var(--accent) / 0.4),
+      0 0 40px hsl(var(--accent) / 0.2);
+  }
+
+  /* Hexagonal pattern background */
+  .hex-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%237fd8dc' fill-opacity='0.08'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-muted/20 rounded-full;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-primary/40 rounded-full hover:bg-primary/60;
+  }
+
+  /* Animation delays */
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .delay-500 {
+    animation-delay: 500ms;
+  }
+}
+
+/* Keyframe animations */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes shine {
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+
+  .animate-shine {
+    background: linear-gradient(90deg,
+        transparent 0%,
+        hsl(var(--primary) / 0.3) 50%,
+        transparent 100%);
+    background-size: 200% 100%;
+    animation: shine 3s ease-in-out infinite;
+  }
+}
+
+/* View Transitions API Animations */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+  will-change: clip-path;
+}
+
+/* Removed global wildcard transition to prevent performance lag during theme swaps */
+
+/* Disable transitions for specified elements if needed */
+.no-transition,
+.no-transition * {
+  transition: none !important;
+}
+
+/* ---break---
+*/
+
+@layer base {
+  * {
+    @apply border-border/20;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
