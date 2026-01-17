@@ -117,7 +117,7 @@ export const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
-          <div className="lg:col-span-2">
+          <div className="">
             <a href="#" className="flex items-center gap-2 mb-4 group">
               <div className="relative">
                 <Cpu className="w-8 h-8 text-cyber-primary" />
@@ -161,7 +161,7 @@ export const Footer = () => {
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-cyber-darkest/50 border-cyber-primary/20 focus:border-accent text-foreground h-11"
+                className="dark:bg-cyber-darkest/50 bg-cyber-primary/10 border-cyber-primary/20 focus:border-accent text-foreground h-11"
                 required
               />
               <RippleButton

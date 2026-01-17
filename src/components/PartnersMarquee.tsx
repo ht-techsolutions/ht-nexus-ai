@@ -15,7 +15,7 @@ const partners = [
 
 export const PartnersMarquee = () => {
   return (
-    <section className="py-16 border-y border-border/30 dark:border-border/50 overflow-hidden bg-background/50">
+    <section className="py-16 dark:border-y border-border/30 dark:border-border/50 overflow-hidden bg-background/50">
       <div className="container mx-auto px-4 mb-8">
         <motion.p
           initial={{ opacity: 0, y: 20 }}

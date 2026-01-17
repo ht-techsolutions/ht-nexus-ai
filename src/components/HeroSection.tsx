@@ -5,7 +5,7 @@ import { HexagonBackground } from "@/components/animate-ui/components/background
 
 export const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20">
       {/* Animated Hexagonal Background */}
       <div className="absolute inset-0 opacity-100 dark:opacity-40" >
         <HexagonBackground hexagonSize={40} hexagonMargin={2} />
@@ -20,7 +20,7 @@ export const HeroSection = () => {
 
 
       {/* Content */}
-      <div className="container mx-auto px-4 relative z-10 pointer-events-none">
+      <div className="container mx-auto px-4 py-8 relative z-10 pointer-events-none">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -92,7 +92,7 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="grid grid-cols-3 gap-8 mt-16 pt-16 border-t border-border/30 dark:border-border/50 pointer-events-auto"
+            className="grid grid-cols-3 gap-8  pt-8 dark:border-t border-border/30 dark:border-border/50 pointer-events-auto"
           >
             {[
               { value: "40%", label: "Cost Reduction" },
@@ -115,9 +115,9 @@ export const HeroSection = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
+        className="flex flex-col items-center gap-2 pointer-events-none z-10"
       >
-        <p className="text-xs uppercase tracking-[0.2em] text-cyber-light/40">Scroll to explore</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-cyber-light">Scroll to explore</p>
         <ChevronDown className="w-5 h-5 text-cyber-primary animate-bounce" />
       </motion.div>
     </section>

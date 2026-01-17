@@ -4,6 +4,7 @@ import { Menu, X, Cpu, Zap } from "lucide-react";
 import { RippleButton } from "@/components/animate-ui/components/buttons/ripple";
 import { Link } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
+import { Logo } from "./Logo";
 
 const navLinks = [
   { href: "#features", label: "Features" },
@@ -82,20 +83,7 @@ export const Navbar = () => {
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
-        <motion.a
-          href="#"
-          className="flex items-center gap-2 group"
-          whileHover={{ scale: 1.02 }}
-        >
-          <div className="relative">
-            <Cpu className="w-8 h-8 text-cyber-primary" />
-            <Zap className="w-3 h-3 text-accent absolute -top-1 -right-1" />
-          </div>
-          <span className="font-display font-bold text-xl tracking-tight">
-            <span className="text-cyber-primary">HT NEXUS</span>
-            <span className="text-accent ml-1 uppercase">AI</span>
-          </span>
-        </motion.a>
+        <Logo />
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
