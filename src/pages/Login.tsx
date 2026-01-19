@@ -13,6 +13,7 @@ import { RippleButton } from "@/components/animate-ui/components/buttons/ripple"
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { api, hashPassword, API_BASE_URL } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Login = () => {
@@ -22,6 +23,7 @@ const Login = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
+  const { loginWithToken } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,16 +37,18 @@ const Login = () => {
       });
 
       if (response.data.status === "success") {
-        localStorage.setItem("ht_nexus_token", response.data.data.token);
+        await loginWithToken(response.data.data.token);
         toast({
           title: "Welcome back!",
           description: "Successfully logged into HT-NEXUS AI.",
         });
-        const returnUrl = (location.state as any)?.returnUrl || "/";
+        const state = location.state as unknown as {
+          returnUrl?: string;
+          plan?: unknown;
+        } | null;
+        const returnUrl = state?.returnUrl || "/";
         navigate(returnUrl, {
-          state: (location.state as any)?.plan
-            ? { plan: (location.state as any)?.plan }
-            : undefined,
+          state: state?.plan ? { plan: state?.plan } : undefined,
         });
       }
     } catch (error) {

@@ -13,6 +13,9 @@ import Checkout from "./pages/Checkout";
 import Success from "./pages/Success";
 import AuthComplete from "./pages/AuthComplete";
 import Legal from "./pages/Legal";
+import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -30,7 +33,23 @@ const App = () => (
             <Route path='/forgot-password' element={<ForgotPassword />} />
             <Route path='/auth/complete' element={<AuthComplete />} />
             <Route path='/checkout' element={<Checkout />} />
-            <Route path='/success' element={<Success />} />
+            <Route path='/success' element={<Success />} />{" "}
+            <Route
+              path='/dashboard'
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/profile'
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />{" "}
             <Route path='/legal/:type' element={<Legal />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path='*' element={<NotFound />} />

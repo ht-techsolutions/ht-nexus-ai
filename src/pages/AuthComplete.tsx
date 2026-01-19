@@ -4,11 +4,13 @@ import { motion } from "framer-motion";
 import { Loader2, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 const AuthComplete = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+  const { loginWithToken, refreshUser } = useAuth();
 
   useEffect(() => {
     const handleAuthComplete = async () => {
@@ -18,10 +20,10 @@ const AuthComplete = () => {
         // should succeed when a browser cookie (HttpOnly) was set by backend.
         const params = new URLSearchParams(window.location.search);
 
-        // If a plain token was included in the redirect, store it locally.
+        // If a plain token was included in the redirect, use it to log in.
         const plainToken = params.get("token");
         if (plainToken) {
-          localStorage.setItem("ht_nexus_token", plainToken);
+          await loginWithToken(plainToken);
         }
 
         // If an authorization `code` or Google `credential` exists, try exchanging
@@ -30,7 +32,7 @@ const AuthComplete = () => {
         const credential = params.get("credential");
         if (code || credential) {
           try {
-            const payload: any = {};
+            const payload: Record<string, string> = {};
             if (code) payload.code = code;
             if (credential) payload.credential = credential;
             // Provide redirect_uri in case backend needs it
@@ -39,7 +41,7 @@ const AuthComplete = () => {
 
             const exchange = await api.post("/auth/google/token", payload);
             if (exchange.data?.data?.token) {
-              localStorage.setItem("ht_nexus_token", exchange.data.data.token);
+              await loginWithToken(exchange.data.data.token);
             }
           } catch (ex) {
             console.warn(
@@ -49,24 +51,22 @@ const AuthComplete = () => {
           }
         }
 
-        // Finally verify by fetching the current user. This relies on either
-        // the HttpOnly cookie being present (withCredentials) or the local token.
-        const response = await api.get("/user");
+        // Finally verify by refreshing the current user via the AuthContext.
+        const u = await refreshUser();
 
-        if (response.data.status === "success") {
-          // Store token if provided in response (fallback)
-          if (response.data.data.token) {
-            localStorage.setItem("ht_nexus_token", response.data.data.token);
-          }
-
+        if (u) {
           toast({
             title: "Welcome!",
             description: "Successfully authenticated via OAuth.",
           });
 
           // Check if there's a return URL in the state
-          const returnUrl = (location.state as any)?.returnUrl || "/";
-          const plan = (location.state as any)?.plan;
+          const state = location.state as unknown as {
+            returnUrl?: string;
+            plan?: unknown;
+          } | null;
+          const returnUrl = state?.returnUrl || "/";
+          const plan = state?.plan;
 
           // Small delay to show success state
           setTimeout(() => {
@@ -76,8 +76,9 @@ const AuthComplete = () => {
           throw new Error("Authentication verification failed");
         }
       } catch (rawError) {
-        const error: any = rawError;
         // Helpful debug info when 401/other occurs
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const error = rawError as any;
         console.error("Auth complete error:", error);
         if (error?.response) {
           console.error("Response data:", error.response.data);
@@ -98,7 +99,7 @@ const AuthComplete = () => {
     };
 
     handleAuthComplete();
-  }, [navigate, location, toast]);
+  }, [navigate, location, toast, loginWithToken, refreshUser]);
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-background relative overflow-hidden'>

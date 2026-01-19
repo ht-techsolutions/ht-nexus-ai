@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
+import { AuthProvider } from "@/context/AuthContext";
 
 // Dynamically load Google reCAPTCHA v3 script when a site key is provided
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
@@ -16,4 +17,8 @@ if (RECAPTCHA_SITE_KEY) {
   }
 }
 
-createRoot(document.getElementById("root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(
+  <AuthProvider>
+    <App />
+  </AuthProvider>,
+);
