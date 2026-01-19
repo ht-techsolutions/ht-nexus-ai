@@ -24,10 +24,14 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Github, href: "#", label: "GitHub" },
-  { icon: Youtube, href: "#", label: "YouTube" },
+  { icon: Twitter, href: "https://ht-techsolutions.com", label: "Twitter" },
+  { icon: Linkedin, href: "https://ht-techsolutions.com", label: "LinkedIn" },
+  {
+    icon: Github,
+    href: "https://github.com/ht-techsolutions",
+    label: "GitHub",
+  },
+  { icon: Youtube, href: "https://ht-techsolutions.com", label: "YouTube" },
 ];
 
 const privacyPolicy = `
@@ -136,7 +140,7 @@ export const Footer = () => {
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12'>
           {/* Brand */}
           <div className=''>
-            <a href='#' className='flex items-center gap-2 mb-4 group'>
+            <a href='/' className='flex items-center gap-2 mb-4 group'>
               <div className='relative'>
                 <Cpu className='w-8 h-8 text-cyber-primary' />
                 <Zap className='w-3 h-3 text-accent absolute -top-1 -right-1 group-hover:scale-110 transition-transform' />
@@ -157,6 +161,8 @@ export const Footer = () => {
                   <motion.a
                     key={index}
                     href={social.href}
+                    target='_blank'
+                    rel='noopener noreferrer'
                     whileHover={{ scale: 1.1, y: -2 }}
                     className='w-10 h-10 rounded-lg glass flex items-center justify-center text-muted-foreground hover:text-accent hover:border-accent/40 transition-all'
                     aria-label={social.label}
@@ -186,6 +192,7 @@ export const Footer = () => {
                 required
               />
               <RippleButton
+                type='submit'
                 variant='accent'
                 className='w-full text-base font-bold py-3'
                 disabled={isSubmitting}

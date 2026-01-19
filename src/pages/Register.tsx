@@ -280,11 +280,11 @@ const Register = () => {
 
           <p className='text-center mt-6 text-sm text-muted-foreground'>
             By creating an account, you agree to our{" "}
-            <Link to='#' className='text-primary hover:underline'>
+            <Link to='/legal/terms' className='text-primary hover:underline'>
               Terms
             </Link>{" "}
             and{" "}
-            <Link to='#' className='text-primary hover:underline'>
+            <Link to='/legal/privacy' className='text-primary hover:underline'>
               Privacy Policy
             </Link>
           </p>

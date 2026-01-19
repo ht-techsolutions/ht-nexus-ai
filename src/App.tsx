@@ -12,6 +12,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Checkout from "./pages/Checkout";
 import Success from "./pages/Success";
 import AuthComplete from "./pages/AuthComplete";
+import Legal from "./pages/Legal";
 
 const queryClient = new QueryClient();
 
@@ -23,15 +24,16 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/auth/complete" element={<AuthComplete />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/success" element={<Success />} />
+            <Route path='/' element={<Index />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/forgot-password' element={<ForgotPassword />} />
+            <Route path='/auth/complete' element={<AuthComplete />} />
+            <Route path='/checkout' element={<Checkout />} />
+            <Route path='/success' element={<Success />} />
+            <Route path='/legal/:type' element={<Legal />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
+            <Route path='*' element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
