@@ -74,7 +74,9 @@ const termsConditions = `
 `;
 
 export const Footer = () => {
-  const [legalModal, setLegalModal] = useState<"privacy" | "terms" | null>(null);
+  const [legalModal, setLegalModal] = useState<"privacy" | "terms" | null>(
+    null,
+  );
 
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -86,17 +88,33 @@ export const Footer = () => {
 
     setIsSubmitting(true);
     try {
-      await api.post("/mail/newsletter", { email });
-      toast({
-        title: "Check your inbox!",
-        description: "We've sent you a verification email for the newsletter.",
-      });
-      setEmail("");
+      const res = await api.post("/mail/newsletter", { email });
+      if (res?.data?.status === "success") {
+        toast({
+          title: "Check your inbox!",
+          description:
+            res.data.message ||
+            "We've sent you a verification email for the newsletter.",
+        });
+        setEmail("");
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Subscription failed",
+          description:
+            res?.data?.message || "Unable to subscribe. Please try again.",
+        });
+      }
     } catch (error) {
+      console.error("Newsletter subscription error:", error);
+      const err: any = error;
+      const msg =
+        err?.response?.data?.message ||
+        "Something went wrong. Please try again.";
       toast({
         variant: "destructive",
         title: "Subscription failed",
-        description: "Something went wrong. Please try again.",
+        description: msg,
       });
     } finally {
       setIsSubmitting(false);
@@ -113,25 +131,26 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="pt-16 pb-8 border-t border-cyber-primary/10 bg-background">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+    <footer className='pt-16 pb-8 border-t border-cyber-primary/10 bg-background'>
+      <div className='container mx-auto px-4'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12'>
           {/* Brand */}
-          <div className="">
-            <a href="#" className="flex items-center gap-2 mb-4 group">
-              <div className="relative">
-                <Cpu className="w-8 h-8 text-cyber-primary" />
-                <Zap className="w-3 h-3 text-accent absolute -top-1 -right-1 group-hover:scale-110 transition-transform" />
+          <div className=''>
+            <a href='#' className='flex items-center gap-2 mb-4 group'>
+              <div className='relative'>
+                <Cpu className='w-8 h-8 text-cyber-primary' />
+                <Zap className='w-3 h-3 text-accent absolute -top-1 -right-1 group-hover:scale-110 transition-transform' />
               </div>
-              <span className="font-display font-bold text-xl tracking-tight">
-                <span className="text-cyber-primary">HT NEXUS</span>
-                <span className="text-accent ml-1 uppercase">AI</span>
+              <span className='font-display font-bold text-xl tracking-tight'>
+                <span className='text-cyber-primary'>HT NEXUS</span>
+                <span className='text-accent ml-1 uppercase'>AI</span>
               </span>
             </a>
-            <p className="text-muted-foreground text-sm mb-6 max-w-xs leading-relaxed">
-              Next-generation supply chain intelligence. Built by HT-Tech Solutions for the future of global logistics.
+            <p className='text-muted-foreground text-sm mb-6 max-w-xs leading-relaxed'>
+              Next-generation supply chain intelligence. Built by HT-Tech
+              Solutions for the future of global logistics.
             </p>
-            <div className="flex items-center gap-3">
+            <div className='flex items-center gap-3'>
               {socialLinks.map((social, index) => {
                 const Icon = social.icon;
                 return (
@@ -139,10 +158,10 @@ export const Footer = () => {
                     key={index}
                     href={social.href}
                     whileHover={{ scale: 1.1, y: -2 }}
-                    className="w-10 h-10 rounded-lg glass flex items-center justify-center text-muted-foreground hover:text-accent hover:border-accent/40 transition-all"
+                    className='w-10 h-10 rounded-lg glass flex items-center justify-center text-muted-foreground hover:text-accent hover:border-accent/40 transition-all'
                     aria-label={social.label}
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className='w-5 h-5' />
                   </motion.a>
                 );
               })}
@@ -150,23 +169,25 @@ export const Footer = () => {
           </div>
 
           {/* Newsletter */}
-          <div className="lg:col-span-1">
-            <h4 className="font-bold text-foreground mb-6 uppercase tracking-wider text-xs">Newsletter</h4>
-            <p className="text-sm text-muted-foreground mb-4">
+          <div className='lg:col-span-1'>
+            <h4 className='font-bold text-foreground mb-6 uppercase tracking-wider text-xs'>
+              Newsletter
+            </h4>
+            <p className='text-sm text-muted-foreground mb-4'>
               Get the latest insights on AI logistics.
             </p>
-            <form onSubmit={handleNewsletterSubmit} className="space-y-3">
+            <form onSubmit={handleNewsletterSubmit} className='space-y-3'>
               <Input
-                type="email"
-                placeholder="Email address"
+                type='email'
+                placeholder='Email address'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="dark:bg-cyber-darkest/50 bg-cyber-primary/10 border-cyber-primary/20 focus:border-accent text-foreground h-11"
+                className='dark:bg-cyber-darkest/50 bg-cyber-primary/10 border-cyber-primary/20 focus:border-accent text-foreground h-11'
                 required
               />
               <RippleButton
-                variant="accent"
-                className="w-full text-base font-bold py-3"
+                variant='accent'
+                className='w-full text-base font-bold py-3'
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Subscribing..." : "Subscribe"}
@@ -176,13 +197,15 @@ export const Footer = () => {
 
           {/* Product Links */}
           <div>
-            <h4 className="font-bold text-foreground mb-6 uppercase tracking-wider text-xs">Product</h4>
-            <ul className="space-y-3">
+            <h4 className='font-bold text-foreground mb-6 uppercase tracking-wider text-xs'>
+              Product
+            </h4>
+            <ul className='space-y-3'>
               {footerLinks.product.map((link, index) => (
                 <li key={index}>
                   <button
                     onClick={() => scrollToSection(link.href)}
-                    className="text-sm text-muted-foreground hover:text-accent transition-colors"
+                    className='text-sm text-muted-foreground hover:text-accent transition-colors'
                   >
                     {link.label}
                   </button>
@@ -193,13 +216,15 @@ export const Footer = () => {
 
           {/* Company Links */}
           <div>
-            <h4 className="font-bold text-foreground mb-6 uppercase tracking-wider text-xs">Company</h4>
-            <ul className="space-y-3">
+            <h4 className='font-bold text-foreground mb-6 uppercase tracking-wider text-xs'>
+              Company
+            </h4>
+            <ul className='space-y-3'>
               {footerLinks.company.map((link, index) => (
                 <li key={index}>
                   <button
                     onClick={() => scrollToSection(link.href)}
-                    className="text-sm text-muted-foreground hover:text-accent transition-colors"
+                    className='text-sm text-muted-foreground hover:text-accent transition-colors'
                   >
                     {link.label}
                   </button>
@@ -210,20 +235,20 @@ export const Footer = () => {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 border-t border-cyber-primary/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">
+        <div className='pt-8 border-t border-cyber-primary/10 flex flex-col md:flex-row items-center justify-between gap-4'>
+          <p className='text-sm text-muted-foreground'>
             © 2026 HT-Tech Solutions. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
+          <div className='flex items-center gap-6'>
             <button
               onClick={() => setLegalModal("privacy")}
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              className='text-sm text-muted-foreground hover:text-primary transition-colors'
             >
               Privacy Policy
             </button>
             <button
               onClick={() => setLegalModal("terms")}
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              className='text-sm text-muted-foreground hover:text-primary transition-colors'
             >
               Terms & Conditions
             </button>
@@ -233,16 +258,19 @@ export const Footer = () => {
 
       {/* Legal Modal */}
       <Dialog open={!!legalModal} onOpenChange={() => setLegalModal(null)}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto glass-dark custom-scrollbar">
+        <DialogContent className='max-w-2xl max-h-[80vh] overflow-y-auto glass-dark custom-scrollbar'>
           <DialogHeader>
-            <DialogTitle className="font-display text-2xl font-bold">
-              {legalModal === "privacy" ? "Privacy Policy" : "Terms & Conditions"}
+            <DialogTitle className='font-display text-2xl font-bold'>
+              {legalModal === "privacy"
+                ? "Privacy Policy"
+                : "Terms & Conditions"}
             </DialogTitle>
           </DialogHeader>
           <div
-            className="prose prose-invert prose-sm max-w-none mt-4"
+            className='prose prose-invert prose-sm max-w-none mt-4'
             dangerouslySetInnerHTML={{
-              __html: legalModal === "privacy" ? privacyPolicy : termsConditions,
+              __html:
+                legalModal === "privacy" ? privacyPolicy : termsConditions,
             }}
           />
         </DialogContent>
