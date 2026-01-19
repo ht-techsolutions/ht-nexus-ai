@@ -137,7 +137,7 @@ export const IntelligenceHub = () => {
                   alt={post.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
+                {/* <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" /> */}
                 <span className="absolute top-4 left-4 px-3 py-1 text-xs font-bold bg-cyber-primary/90 text-white rounded-full border border-cyber-light/30">
                   {post.category}
                 </span>
@@ -177,17 +177,17 @@ export const IntelligenceHub = () => {
 
       {/* Blog Modal */}
       <Dialog open={!!selectedPost} onOpenChange={() => setSelectedPost(null)}>
-        <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto glass-dark custom-scrollbar">
+        <DialogContent className="max-w-4xl lg:max-w-6xl max-h-[85vh] overflow-y-auto dark:glass bg-white custom-scrollbar">
           {selectedPost && (
             <>
               <DialogHeader className="p-0">
-                <div className="relative h-64 overflow-hidden rounded-t-2xl border-b border-cyber-primary/20">
+                <div className="h-[500px] overflow-hidden rounded-2xl border-b border-cyber-primary/20">
                   <img
                     src={selectedPost.image}
                     alt={selectedPost.title}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-cyber-darkest to-transparent" />
+                  {/* <div className="absolute inset-0 bg-gradient-to-t from-cyber-darkest to-transparent" /> */}
                   <span className="absolute top-4 left-4 px-3 py-1 text-xs font-bold bg-cyber-primary text-white rounded-full border border-cyber-light/30">
                     {selectedPost.category}
                   </span>
@@ -203,9 +203,14 @@ export const IntelligenceHub = () => {
                 </div>
               </DialogHeader>
 
-              <div className="px-6 pb-8">
+              <div className="px-16 mx-4 py-8 rounded-sm border border-cyber-primary/20">
                 <div
-                  className="prose prose-invert prose-sm max-w-none mt-6 prose-headings:text-cyber-light prose-strong:text-accent prose-a:text-cyber-primary"
+                  className="mt-6 max-w-none text-muted-foreground
+                    [&>h3]:font-display [&>h3]:text-xl [&>h3]:font-bold [&>h3]:text-cyber-light [&>h3]:mt-6 [&>h3]:mb-3
+                    [&>p]:text-sm [&>p]:leading-relaxed [&>p]:mb-4
+                    [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:mb-4 [&>ul]:space-y-2
+                    [&>li]:text-sm [&>li::marker]:text-cyber-primary
+                    [&_strong]:text-accent [&_strong]:font-bold"
                   dangerouslySetInnerHTML={{ __html: selectedPost.content }}
                 />
               </div>

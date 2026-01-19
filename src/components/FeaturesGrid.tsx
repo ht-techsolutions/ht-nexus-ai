@@ -78,11 +78,11 @@ const FeatureCard = ({ feature, index }: FeatureCardProps) => {
   const mouseY = useMotionValue(0);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [10, -10]), {
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [5, -5]), {
     stiffness: 300,
     damping: 30,
   });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-10, 10]), {
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-5, 5]), {
     stiffness: 300,
     damping: 30,
   });
@@ -119,7 +119,7 @@ const FeatureCard = ({ feature, index }: FeatureCardProps) => {
         className={`h-full p-6 md:p-8 rounded-2xl border transition-all duration-300 ${feature.highlight
           ? "glass border-cyber-primary/30 dark:border-cyber-primary/40 shadow-xl shadow-cyber-primary/5 dark:shadow-cyber-primary/20"
           : "glass border-border/50 dark:border-white/10"
-          } group-hover:translate-y-[-4px] group-hover:shadow-2xl group-hover:shadow-cyber-primary/10 group-hover:border-cyber-primary/50`}
+          } group-hover:translate-y-[-4px] group-hover:shadow-2xl group-hover:shadow-cyber-primary/10 group-hover:border-cyber-primary/50 content-center`}
       >
         {/* Animated gradient border on hover */}
         {feature.highlight && (
@@ -224,7 +224,7 @@ export const FeaturesGrid = () => {
         </motion.div>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 grid-flow-dense">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 grid-flow-dense content-center">
           {features.map((feature, index) => (
             <FeatureCard key={index} feature={feature} index={index} />
           ))}

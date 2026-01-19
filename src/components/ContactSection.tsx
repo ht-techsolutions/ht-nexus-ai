@@ -1,6 +1,7 @@
+import ReCAPTCHA from "react-google-recaptcha";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Send, Shield } from "lucide-react";
+import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { RippleButton } from "@/components/animate-ui/components/buttons/ripple";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,14 +15,25 @@ export const ContactSection = () => {
     email: "",
     message: "",
   });
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    if (!recaptchaToken) {
+      toast({
+        variant: "destructive",
+        title: "Captcha required",
+        description: "Please complete the reCAPTCHA verification.",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      await api.post("/mail/contact", formData);
+      await api.post("/mail/contact", { ...formData, recaptcha_token: recaptchaToken });
       toast({
         title: "Message sent successfully!",
         description: "We'll get back to you within 24 hours.",
@@ -197,6 +209,14 @@ export const ContactSection = () => {
                   />
                 </div>
 
+                <div className="flex justify-center mb-4">
+                  <ReCAPTCHA
+                    sitekey="6Lc7YMIqAAAAAIwJ6yWqKqOQoQk_uT7Nq8q7_q7_" // Placeholder key - user needs to replace
+                    onChange={(token) => setRecaptchaToken(token)}
+                    theme="dark"
+                  />
+                </div>
+
                 <RippleButton
                   type="submit"
                   variant="accent"
@@ -212,12 +232,6 @@ export const ContactSection = () => {
                     </>
                   )}
                 </RippleButton>
-
-                {/* reCAPTCHA badge */}
-                <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-                  <Shield className="w-3 h-3" />
-                  Protected by reCAPTCHA
-                </div>
               </div>
             </form>
           </motion.div>

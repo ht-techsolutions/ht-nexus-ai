@@ -5,6 +5,7 @@ import { Check, Shield, Truck, Globe, ArrowRight, CreditCard, Sparkles, ArrowLef
 import { RippleButton } from "@/components/animate-ui/components/buttons/ripple";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { api } from "@/lib/api";
 
 const plans = [
     {
@@ -80,7 +81,7 @@ const Checkout = () => {
         return v;
     };
 
-    const handleCheckout = () => {
+    const handleCheckout = async () => {
         if (!cardData.number || !cardData.expiry || !cardData.cvc || !cardData.name) {
             toast({
                 variant: "destructive",
@@ -89,16 +90,48 @@ const Checkout = () => {
             });
             return;
         }
-        setIsLoading(true);
-        // Simulate payment processing
-        setTimeout(() => {
-            setIsLoading(false);
+
+        // Check if user is authenticated
+        const token = localStorage.getItem("ht_nexus_token");
+        if (!token) {
             toast({
-                title: "Order Processed!",
-                description: `Successfully subscribed to ${selectedPlan.name}.`,
+                variant: "destructive",
+                title: "Authentication required",
+                description: "Please sign in to complete your purchase.",
             });
-            navigate("/success");
-        }, 2000);
+            navigate("/login", { state: { returnUrl: "/checkout", plan: selectedPlan } });
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            const response = await api.post("/payments/subscribe", {
+                plan_id: selectedPlan.id,
+                payment_method: {
+                    card_number: cardData.number.replace(/\s/g, ""),
+                    expiry: cardData.expiry,
+                    cvc: cardData.cvc,
+                    cardholder_name: cardData.name,
+                },
+            });
+
+            if (response.data.status === "success") {
+                toast({
+                    title: "Order Processed!",
+                    description: `Successfully subscribed to ${selectedPlan.name}.`,
+                });
+                navigate("/success");
+            }
+        } catch (error: any) {
+            const message = error.response?.data?.message || "Payment processing failed. Please try again.";
+            toast({
+                variant: "destructive",
+                title: "Payment failed",
+                description: message,
+            });
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
