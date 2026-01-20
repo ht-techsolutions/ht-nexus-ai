@@ -80,13 +80,14 @@ export const ContactSection = () => {
     {
       icon: Phone,
       label: "Phone",
-      value: "+1 (555) 123-4567",
-      href: "tel:+15551234567",
+      value: "+1 415 782 9641",
+      href: "tel:+14157829641",
     },
     {
       icon: MapPin,
       label: "Location",
-      value: "San Francisco, CA",
+      value:
+        "500 Montgomery Street, Suite 1400, San Francisco, CA 94111, United States",
       href: "#",
     },
   ];
