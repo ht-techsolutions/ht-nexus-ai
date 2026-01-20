@@ -28,8 +28,8 @@ function mergeRefs<T>(
       if (!ref) return;
       if (typeof ref === 'function') {
         ref(node);
-      } else {
-        (ref as React.RefObject<T | null>).current = node;
+      } else if (typeof ref === 'object') {
+        (ref as React.MutableRefObject<T | null>).current = node;
       }
     });
   };

@@ -10,16 +10,13 @@ import {
 } from 'motion/react';
 
 import { useAutoHeight } from '@/hooks/use-auto-height';
-import { Slot, WithAsChild } from '@/components/animate-ui/primitives/animate/slot';
 
-type AutoHeightProps = WithAsChild<
-  {
-    children: React.ReactNode;
-    deps?: React.DependencyList;
-    animate?: TargetAndTransition | LegacyAnimationControls;
-    transition?: Transition;
-  } & Omit<HTMLMotionProps<'div'>, 'animate'>
->;
+type AutoHeightProps = {
+  children: React.ReactNode;
+  deps?: React.DependencyList;
+  animate?: TargetAndTransition | LegacyAnimationControls;
+  transition?: Transition;
+} & Omit<HTMLMotionProps<'div'>, 'animate'>;
 
 function AutoHeight({
   children,
@@ -33,22 +30,19 @@ function AutoHeight({
   },
   style,
   animate,
-  asChild = false,
   ...props
 }: AutoHeightProps) {
   const { ref, height } = useAutoHeight<HTMLDivElement>(deps);
 
-  const Comp = asChild ? Slot : motion.div;
-
   return (
-    <Comp
+    <motion.div
       style={{ overflow: 'hidden', ...style }}
       animate={{ height, ...animate }}
       transition={transition}
       {...props}
     >
       <div ref={ref}>{children}</div>
-    </Comp>
+    </motion.div>
   );
 }
 

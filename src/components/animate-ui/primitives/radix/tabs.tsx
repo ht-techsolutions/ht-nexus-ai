@@ -50,18 +50,36 @@ function Tabs(props: TabsProps) {
   );
 }
 
-type TabsHighlightProps = Omit<HighlightProps, 'controlledItems' | 'value'>;
+type TabsHighlightProps = Omit<HighlightProps<'div'>, 'controlledItems' | 'value' | 'mode'> & {
+  mode?: 'children' | 'parent';
+};
 
 function TabsHighlight({
   transition = { type: 'spring', stiffness: 200, damping: 25 },
+  mode = 'children',
   ...props
 }: TabsHighlightProps) {
   const { value } = useTabs();
+
+  if (mode === 'parent') {
+    return (
+      <Highlight
+        data-slot="tabs-highlight"
+        controlledItems
+        mode="parent"
+        value={value}
+        transition={transition}
+        click={false}
+        {...props}
+      />
+    );
+  }
 
   return (
     <Highlight
       data-slot="tabs-highlight"
       controlledItems
+      mode="children"
       value={value}
       transition={transition}
       click={false}

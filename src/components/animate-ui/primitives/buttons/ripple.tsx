@@ -4,7 +4,6 @@ import * as React from 'react';
 import { motion, type HTMLMotionProps } from 'motion/react';
 
 import { getStrictContext } from '@/lib/get-strict-context';
-import { Slot, type WithAsChild } from '@/components/animate-ui/primitives/animate/slot';
 
 type Ripple = {
   id: number;
@@ -20,25 +19,29 @@ type RippleButtonContextType = {
 const [RippleButtonProvider, useRippleButton] =
   getStrictContext<RippleButtonContextType>('RippleButtonContext');
 
-type RippleButtonProps = WithAsChild<
-  HTMLMotionProps<'button'> & {
-    hoverScale?: number;
-    tapScale?: number;
-  }
->;
+type RippleButtonProps = HTMLMotionProps<'button'> & {
+  hoverScale?: number;
+  tapScale?: number;
+};
 
 function RippleButton({
   ref,
   onClick,
   hoverScale = 1.05,
   tapScale = 0.95,
-  asChild = false,
   style,
   ...props
 }: RippleButtonProps) {
   const [ripples, setRipples] = React.useState<Ripple[]>([]);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
-  React.useImperativeHandle(ref, () => buttonRef.current as HTMLButtonElement);
+  
+  React.useEffect(() => {
+    if (ref && typeof ref === 'object' && 'current' in ref) {
+      (ref as React.MutableRefObject<HTMLButtonElement | null>).current = buttonRef.current;
+    } else if (typeof ref === 'function') {
+      ref(buttonRef.current);
+    }
+  }, [ref]);
 
   const createRipple = React.useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -74,11 +77,9 @@ function RippleButton({
     [createRipple, onClick],
   );
 
-  const Component = asChild ? Slot : motion.button;
-
   return (
     <RippleButtonProvider value={{ ripples, setRipples }}>
-      <Component
+      <motion.button
         ref={buttonRef}
         data-slot="ripple-button"
         onClick={handleClick}
@@ -95,27 +96,22 @@ function RippleButton({
   );
 }
 
-type RippleButtonRipplesProps = WithAsChild<
-  HTMLMotionProps<'span'> & {
-    color?: string;
-    scale?: number;
-  }
->;
+type RippleButtonRipplesProps = HTMLMotionProps<'span'> & {
+  color?: string;
+  scale?: number;
+};
 
 function RippleButtonRipples({
   color = 'var(--ripple-button-ripple-color)',
   scale = 10,
   transition = { duration: 0.6, ease: 'easeOut' },
-  asChild = false,
   style,
   ...props
 }: RippleButtonRipplesProps) {
   const { ripples } = useRippleButton();
 
-  const Component = asChild ? Slot : motion.span;
-
   return ripples.map((ripple) => (
-    <Component
+    <motion.span
       key={ripple.id}
       initial={{ scale: 0, opacity: 0.5 }}
       animate={{ scale, opacity: 0 }}
