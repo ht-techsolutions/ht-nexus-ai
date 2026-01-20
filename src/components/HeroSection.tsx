@@ -8,7 +8,7 @@ export const HeroSection = () => {
   return (
     <section className='relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20'>
       {/* Animated Hexagonal Background */}
-      <div className='absolute inset-0 opacity-100 dark:opacity-40'>
+      <div className='absolute inset-0 opacity-100 '>
         <HexagonBackground hexagonSize={40} hexagonMargin={2} />
       </div>
 
@@ -98,7 +98,7 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className='grid grid-cols-3 gap-8  pt-8 dark:border-t border-border/30 dark:border-border/50 pointer-events-auto'
+            className='grid grid-cols-3 gap-8  pt-8 border-border/30 dark:border-border/50 pointer-events-auto'
           >
             {[
               { value: "40%", label: "Cost Reduction" },

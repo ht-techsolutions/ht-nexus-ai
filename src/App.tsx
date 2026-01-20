@@ -24,7 +24,11 @@ import AnalyticsPage from "./pages/dashboard/AnalyticsPage";
 import NetworkPage from "./pages/dashboard/NetworkPage";
 import AIEnginePage from "./pages/dashboard/AIEnginePage";
 import FleetPage from "./pages/dashboard/FleetPage";
-import { SettingsPage, NotificationsPage, HelpPage } from "./pages/dashboard/UtilityPages";
+import {
+  SettingsPage,
+  NotificationsPage,
+  HelpPage,
+} from "./pages/dashboard/UtilityPages";
 
 const queryClient = new QueryClient();
 
@@ -37,15 +41,15 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/auth/complete" element={<AuthComplete />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/success" element={<Success />} />
+              <Route path='/' element={<Index />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/register' element={<Register />} />
+              <Route path='/forgot-password' element={<ForgotPassword />} />
+              <Route path='/auth/complete' element={<AuthComplete />} />
+              <Route path='/checkout' element={<Checkout />} />
+              <Route path='/success' element={<Success />} />
               <Route
-                path="/dashboard"
+                path='/dashboard'
                 element={
                   <ProtectedRoute>
                     <DashboardLayout />
@@ -53,26 +57,20 @@ const App = () => (
                 }
               >
                 <Route index element={<DashboardOverview />} />
-                <Route path="routing" element={<RoutingPage />} />
-                <Route path="compliance" element={<CompliancePage />} />
-                <Route path="analytics" element={<AnalyticsPage />} />
-                <Route path="network" element={<NetworkPage />} />
-                <Route path="ai-engine" element={<AIEnginePage />} />
-                <Route path="fleet" element={<FleetPage />} />
-                <Route path="settings" element={<SettingsPage />} />
-                <Route path="notifications" element={<NotificationsPage />} />
-                <Route path="help" element={<HelpPage />} />
+                <Route path='routing' element={<RoutingPage />} />
+                <Route path='compliance' element={<CompliancePage />} />
+                <Route path='analytics' element={<AnalyticsPage />} />
+                <Route path='network' element={<NetworkPage />} />
+                <Route path='ai-engine' element={<AIEnginePage />} />
+                <Route path='fleet' element={<FleetPage />} />
+                <Route path='settings' element={<SettingsPage />} />
+                <Route path='notifications' element={<NotificationsPage />} />
+                <Route path='help' element={<HelpPage />} />
+                <Route path='profile' element={<Profile />} />
               </Route>
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <Profile />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/legal/:type" element={<Legal />} />
-              <Route path="*" element={<NotFound />} />
+
+              <Route path='/legal/:type' element={<Legal />} />
+              <Route path='*' element={<NotFound />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>

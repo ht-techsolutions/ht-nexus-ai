@@ -195,7 +195,7 @@ export const Navbar = () => {
                       Dashboard
                     </Link>
                     <Link
-                      to='/profile'
+                      to='/dashboard/profile'
                       onClick={() => setIsProfileOpen(false)}
                       className='block px-4 py-2 text-sm hover:bg-cyber-primary/5'
                     >
@@ -291,7 +291,7 @@ export const Navbar = () => {
                       </RippleButton>
                     </Link>
                     <Link
-                      to='/profile'
+                      to='/dashboard/profile'
                       className='w-full'
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
