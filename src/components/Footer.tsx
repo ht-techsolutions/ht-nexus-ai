@@ -5,6 +5,7 @@ import {
   FaFacebook as Facebook,
   FaLinkedin as Linkedin,
   FaYoutube as Youtube,
+  FaPinterest as Pinterest,
 } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -25,14 +26,27 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { icon: Twitter, href: "https://ht-techsolutions.com", label: "Twitter" },
-  { icon: Linkedin, href: "https://ht-techsolutions.com", label: "LinkedIn" },
+  { icon: Twitter, href: "https://x.com/HtTechsolu56515", label: "Twitter" },
+  {
+    icon: Linkedin,
+    href: "https://www.linkedin.com/company/ht-techsolution/",
+    label: "LinkedIn",
+  },
   {
     icon: Facebook,
-    href: "https://facebook.com/ht-techsolutions",
+    href: "https://www.facebook.com/HTtech.so/",
     label: "Facebook",
   },
-  { icon: Youtube, href: "https://ht-techsolutions.com", label: "YouTube" },
+  {
+    icon: Youtube,
+    href: "https://www.youtube.com/@HT_TechSolution",
+    label: "YouTube",
+  },
+  {
+    icon: Pinterest,
+    href: "https://www.pinterest.com/Ht_Techsolutions/",
+    label: "Pinterest",
+  },
 ];
 const citationLinks = [
   {
