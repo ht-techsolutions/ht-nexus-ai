@@ -100,9 +100,7 @@ export const DashboardSidebar = ({
         <div className='flex items-center justify-between'>
           {isOpen && <Logo />}
           {!isOpen && (
-            <div className='w-10 h-10 rounded-xl bg-gradient-to-br from-cyber-primary to-accent flex items-center justify-center'>
-              <Cpu className='w-5 h-5 text-white' />
-            </div>
+            <img src="/favicon.webp" alt="HT-NEXUS AI" className="w-8 h-8" />
           )}
         </div>
       </div>

@@ -17,6 +17,7 @@ if (RECAPTCHA_SITE_KEY) {
   }
 }
 
+
 createRoot(document.getElementById("root")!).render(
   <AuthProvider>
     <App />

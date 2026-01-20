@@ -10,10 +10,11 @@ import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
 const navLinks = [
-  { href: "#features", label: "Features" },
   { href: "#journey", label: "Journey" },
+  { href: "#features", label: "Features" },
   { href: "#insights", label: "Insights" },
   { href: "#pricing", label: "Pricing" },
+  { href: "#faq", label: "FAQ" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -46,7 +47,14 @@ export const Navbar = () => {
       observerCallback,
       observerOptions,
     );
-    const sections = ["features", "journey", "insights", "pricing", "contact"];
+    const sections = [
+      "features",
+      "journey",
+      "insights",
+      "pricing",
+      "faq",
+      "contact",
+    ];
     sections.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
@@ -189,6 +197,7 @@ export const Navbar = () => {
                   >
                     <Link
                       to='/dashboard'
+                      target='_blank'
                       onClick={() => setIsProfileOpen(false)}
                       className='block px-4 py-2 text-sm hover:bg-cyber-primary/5'
                     >
@@ -196,6 +205,7 @@ export const Navbar = () => {
                     </Link>
                     <Link
                       to='/dashboard/profile'
+                      target='_blank'
                       onClick={() => setIsProfileOpen(false)}
                       className='block px-4 py-2 text-sm hover:bg-cyber-primary/5'
                     >
