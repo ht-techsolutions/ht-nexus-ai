@@ -122,13 +122,25 @@ const Checkout = () => {
     setIsLoading(true);
     try {
       // Use the documented subscription endpoint
+      // Parse expiry MM/YY into month and year expected by backend
+      const expParts = cardData.expiry.split("/").map((p) => p.trim());
+      let expiryMonth = expParts[0] ?? "";
+      let expiryYear = expParts[1] ?? "";
+      // Backend expects 2-digit year (YY) and 2-digit month (MM)
+      if (expiryYear.length === 4) {
+        expiryYear = expiryYear.slice(-2);
+      }
+      expiryMonth = expiryMonth.padStart(2, "0").slice(-2);
+      expiryYear = expiryYear.padStart(2, "0").slice(-2);
+
       const response = await api.post("/subscriptions", {
-        plan_id: selectedPlan.id,
+        plan_slug: selectedPlan.id,
         payment_method: {
           card_number: cardData.number.replace(/\s/g, ""),
-          expiry: cardData.expiry,
-          cvc: cardData.cvc,
-          cardholder_name: cardData.name,
+          expiry_month: expiryMonth,
+          expiry_year: expiryYear,
+          cvv: cardData.cvc,
+          card_holder: cardData.name,
         },
       });
 
@@ -140,9 +152,12 @@ const Checkout = () => {
         navigate("/success");
       }
     } catch (err: unknown) {
-      // Narrow the unknown error to access response safely
+      // Narrow the unknown error to access response safely (include validation errors)
       const error = err as {
-        response?: { status?: number; data?: { message?: string } };
+        response?: {
+          status?: number;
+          data?: { message?: string; errors?: Record<string, string[]> };
+        };
       };
       // Provide clearer feedback for a 405 Method Not Allowed
       if (error?.response?.status === 405) {
@@ -156,10 +171,17 @@ const Checkout = () => {
         const message =
           error?.response?.data?.message ||
           "Payment processing failed. Please try again.";
+        const validationErrors = error?.response?.data?.errors as
+          | Record<string, string[]>
+          | undefined;
+        const description = validationErrors
+          ? Object.values(validationErrors).flat().join(" ")
+          : message;
+
         toast({
           variant: "destructive",
           title: "Payment failed",
-          description: message,
+          description,
         });
       }
     } finally {

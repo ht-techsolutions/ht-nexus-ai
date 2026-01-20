@@ -62,24 +62,6 @@ const mainNavItems = [
   },
 ];
 
-const bottomNavItems = [
-  {
-    icon: Bell,
-    label: "Notifications",
-    path: "/dashboard/notifications",
-  },
-  {
-    icon: Settings,
-    label: "Settings",
-    path: "/dashboard/settings",
-  },
-  {
-    icon: HelpCircle,
-    label: "Help & Support",
-    path: "/dashboard/help",
-  },
-];
-
 interface DashboardSidebarProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
@@ -170,25 +152,6 @@ export const DashboardSidebar = ({
 
       {/* Bottom Navigation */}
       <div className='p-3 border-t border-cyber-primary/20 space-y-1'>
-        {bottomNavItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            onClick={() => setIsMobileOpen(false)}
-            className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group",
-              isActiveRoute(item.path)
-                ? "bg-cyber-primary/20 text-cyber-primary"
-                : "text-muted-foreground hover:text-foreground hover:bg-cyber-primary/10",
-            )}
-          >
-            <item.icon className='w-5 h-5 flex-shrink-0' />
-            {isOpen && (
-              <span className='font-medium text-sm'>{item.label}</span>
-            )}
-          </NavLink>
-        ))}
-
         {/* User & Logout */}
         <div className='pt-3 border-t border-cyber-primary/20 mt-3'>
           {isOpen && user && (

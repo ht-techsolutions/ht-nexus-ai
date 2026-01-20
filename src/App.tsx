@@ -24,11 +24,6 @@ import AnalyticsPage from "./pages/dashboard/AnalyticsPage";
 import NetworkPage from "./pages/dashboard/NetworkPage";
 import AIEnginePage from "./pages/dashboard/AIEnginePage";
 import FleetPage from "./pages/dashboard/FleetPage";
-import {
-  SettingsPage,
-  NotificationsPage,
-  HelpPage,
-} from "./pages/dashboard/UtilityPages";
 
 const queryClient = new QueryClient();
 
@@ -63,9 +58,6 @@ const App = () => (
                 <Route path='network' element={<NetworkPage />} />
                 <Route path='ai-engine' element={<AIEnginePage />} />
                 <Route path='fleet' element={<FleetPage />} />
-                <Route path='settings' element={<SettingsPage />} />
-                <Route path='notifications' element={<NotificationsPage />} />
-                <Route path='help' element={<HelpPage />} />
                 <Route path='profile' element={<Profile />} />
               </Route>
 
