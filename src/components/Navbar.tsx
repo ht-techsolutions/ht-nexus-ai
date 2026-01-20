@@ -4,6 +4,7 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { RippleButton } from "@/components/animate-ui/components/buttons/ripple";
 import { Link, useNavigate } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
+import { useTheme } from "./ThemeProvider";
 import { Logo } from "./Logo";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -103,6 +104,8 @@ export const Navbar = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const { theme } = useTheme();
+
   return (
     <motion.header
       initial={{ y: -100 }}
@@ -110,7 +113,9 @@ export const Navbar = () => {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "glass-dark py-3 shadow-lg shadow-background/50"
+          ? theme === "dark"
+            ? "glass-dark py-3 shadow-lg shadow-background/50"
+            : "glass py-3 shadow-lg shadow-background/50"
           : "bg-transparent py-5"
       }`}
     >
@@ -251,7 +256,7 @@ export const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className='md:hidden glass-dark border-t border-cyber-primary/20'
+            className={`md:hidden ${theme === "dark" ? "glass-dark" : "glass"} border-t border-cyber-primary/20`}
           >
             <nav className='container mx-auto px-4 py-6 flex flex-col gap-4'>
               {navLinks.map((link) => {

@@ -74,8 +74,8 @@ export const ContactSection = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "hello@ht-nexus.ai",
-      href: "mailto:hello@ht-nexus.ai",
+      value: "support@ht-techsolutions.com",
+      href: "mailto:support@ht-techsolutions.com",
     },
     {
       icon: Phone,
