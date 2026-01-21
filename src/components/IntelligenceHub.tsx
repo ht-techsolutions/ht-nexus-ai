@@ -18,7 +18,7 @@ const blogPosts = [
     date: "Jan 12, 2026",
     category: "AI & ML",
     image:
-      "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=800&auto=format&fit=crop",
+      "/The Future of Last-Mile AI Delivery.webp",
     content: `
       <p>The last mile of delivery has long been the most challenging and expensive part of the logistics chain. With AI-driven solutions, companies are now able to predict delivery windows with unprecedented accuracy.</p>
       
@@ -45,7 +45,7 @@ const blogPosts = [
     date: "Jan 8, 2026",
     category: "Sustainability",
     image:
-      "https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=800&auto=format&fit=crop",
+      "/Sustainable Supply Chains.webp",
     content: `
       <p>Sustainability is no longer optional—it's a business imperative. Data-driven supply chain management is at the forefront of this green revolution.</p>
       
@@ -71,7 +71,7 @@ const blogPosts = [
     date: "Jan 5, 2026",
     category: "Technology",
     image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop",
+      "/Real-Time Visibility.webp",
     content: `
       <p>In today's fast-paced business environment, knowing where your products are at any given moment isn't a luxury—it's a necessity.</p>
       

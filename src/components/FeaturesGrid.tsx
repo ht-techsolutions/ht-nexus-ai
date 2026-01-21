@@ -4,18 +4,22 @@ import { useRef, MouseEvent, useState } from "react";
 
 const features = [
   {
-    icon: Route,
+    icon: "/Predictive Routing.webp",
     title: "Predictive Routing",
     description:
       "AI-powered route optimization that anticipates delays, weather impacts, and traffic patterns before they happen.",
     detailedDescription:
       "Leverage advanced machine learning to reduce delivery times by up to 40% and fuel costs by 35%. Our system processes real-time data from weather stations, traffic APIs, and historical patterns to predict optimal routes hours in advance.",
-    highlights: ["40% faster delivery", "35% fuel savings", "Real-time optimization"],
+    highlights: [
+      "40% faster delivery",
+      "35% fuel savings",
+      "Real-time optimization",
+    ],
     span: "col-span-1 md:col-span-2",
     highlight: true,
   },
   {
-    icon: Shield,
+    icon: "/Auto-Compliance.webp",
     title: "Auto-Compliance",
     description:
       "Automatic regulatory compliance checks across 150+ countries with real-time updates.",
@@ -25,17 +29,21 @@ const features = [
     span: "col-span-1",
   },
   {
-    icon: BarChart3,
+    icon: "/Real-Time Analytics.webp",
     title: "Real-Time Analytics",
     description:
       "Live dashboards with actionable insights, cost breakdowns, and performance metrics.",
     detailedDescription:
       "Make data-driven decisions with comprehensive analytics dashboards. Track KPIs in real-time, identify cost-saving opportunities instantly, and forecast future trends with 95% accuracy using our AI models.",
-    highlights: ["Live data updates", "95% forecast accuracy", "Instant insights"],
+    highlights: [
+      "Live data updates",
+      "95% forecast accuracy",
+      "Instant insights",
+    ],
     span: "col-span-1",
   },
   {
-    icon: Globe,
+    icon: "/Global Network.webp",
     title: "Global Network",
     description:
       "Connected to 500+ carriers and logistics partners worldwide for seamless operations.",
@@ -45,7 +53,7 @@ const features = [
     span: "col-span-1",
   },
   {
-    icon: Cpu,
+    icon: "/AI Decision Engine.webp",
     title: "AI Decision Engine",
     description:
       "Machine learning models trained on billions of data points for intelligent automation.",
@@ -56,13 +64,17 @@ const features = [
     highlight: true,
   },
   {
-    icon: Truck,
+    icon: "/Fleet Management.webp",
     title: "Fleet Management",
     description:
       "End-to-end visibility and control over your entire fleet with IoT integration.",
     detailedDescription:
       "Monitor vehicle health, driver behavior, and cargo conditions in real-time with IoT sensors. Predictive maintenance reduces downtime by 60%, while route optimization cuts operating costs by 25%.",
-    highlights: ["Real-time IoT data", "60% less downtime", "25% cost reduction"],
+    highlights: [
+      "Real-time IoT data",
+      "60% less downtime",
+      "25% cost reduction",
+    ],
     span: "col-span-1",
   },
 ];
@@ -101,7 +113,6 @@ const FeatureCard = ({ feature, index }: FeatureCardProps) => {
     mouseY.set(0);
   };
 
-  const Icon = feature.icon;
 
   return (
     <motion.div
@@ -116,47 +127,52 @@ const FeatureCard = ({ feature, index }: FeatureCardProps) => {
       className={`${feature.span} group relative`}
     >
       <div
-        className={`h-full p-6 md:p-8 rounded-2xl border transition-all duration-300 ${feature.highlight
-          ? "glass border-cyber-primary/30 dark:border-cyber-primary/40 shadow-xl shadow-cyber-primary/5 dark:shadow-cyber-primary/20"
-          : "glass border-border/50 dark:border-white/10"
-          } group-hover:translate-y-[-4px] group-hover:shadow-2xl group-hover:shadow-cyber-primary/10 group-hover:border-cyber-primary/50 content-center`}
+        className={`h-full p-6 md:p-8 rounded-2xl border transition-all duration-300 ${
+          feature.highlight
+            ? "glass border-cyber-primary/30 dark:border-cyber-primary/40 shadow-xl shadow-cyber-primary/5 dark:shadow-cyber-primary/20"
+            : "glass border-border/50 dark:border-white/10"
+        } group-hover:translate-y-[-4px] group-hover:shadow-2xl group-hover:shadow-cyber-primary/10 group-hover:border-cyber-primary/50 content-center`}
       >
         {/* Animated gradient border on hover */}
         {feature.highlight && (
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyber-primary via-accent to-cyber-primary opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none blur" />
+          <div className='absolute inset-0 rounded-2xl bg-gradient-to-br from-cyber-primary via-accent to-cyber-primary opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none blur' />
         )}
 
         {/* Glow effect on hover */}
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyber-primary/10 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+        <div className='absolute inset-0 rounded-2xl bg-gradient-to-br from-cyber-primary/10 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none' />
 
         {/* Content */}
-        <div className="relative z-10">
+        <div className='relative z-10'>
           <div
-            className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${feature.highlight
-              ? "bg-gradient-to-br from-accent to-cyber-primary"
-              : "bg-cyber-primary/20"
-              }`}
+            className={`w-12 h-12 p-1 rounded-xl flex items-center justify-center mb-4 ${
+              feature.highlight
+                ? "bg-gradient-to-br from-accent to-cyber-primary"
+                : "bg-cyber-primary/20"
+            }`}
           >
-            <Icon
-              className={`w-6 h-6 ${feature.highlight ? "text-white" : "text-cyber-primary"
-                }`}
+            <img
+              src={feature.icon}
+              alt={feature.title}
+              className={` ${
+                feature.highlight ? "text-white" : "text-cyber-primary"
+              }`}
             />
           </div>
 
-          <h3 className="font-display text-xl font-bold text-foreground mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyber-primary group-hover:to-accent group-hover:bg-clip-text transition-all">
+          <h3 className='font-display text-xl font-bold text-foreground mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyber-primary group-hover:to-accent group-hover:bg-clip-text transition-all'>
             {feature.title}
           </h3>
 
-          <p className="text-muted-foreground text-sm leading-relaxed mb-3">
+          <p className='text-muted-foreground text-sm leading-relaxed mb-3'>
             {feature.description}
           </p>
 
           {/* Highlight badges */}
-          <div className="flex flex-wrap gap-2 mb-3">
+          <div className='flex flex-wrap gap-2 mb-3'>
             {feature.highlights.map((highlight, idx) => (
               <span
                 key={idx}
-                className="px-2 py-1 text-xs font-semibold bg-gradient-to-r from-cyber-primary to-accent text-white rounded-full shadow-sm"
+                className='px-2 py-1 text-xs font-semibold bg-gradient-to-r from-cyber-primary to-accent text-white rounded-full shadow-sm'
               >
                 {highlight}
               </span>
@@ -166,11 +182,14 @@ const FeatureCard = ({ feature, index }: FeatureCardProps) => {
           {/* Expandable detailed description */}
           <motion.div
             initial={false}
-            animate={{ height: isExpanded ? "auto" : 0, opacity: isExpanded ? 1 : 0 }}
+            animate={{
+              height: isExpanded ? "auto" : 0,
+              opacity: isExpanded ? 1 : 0,
+            }}
             transition={{ duration: 0.3 }}
-            className="overflow-hidden"
+            className='overflow-hidden'
           >
-            <p className="text-sm text-muted-foreground/80 leading-relaxed pt-2 border-t border-border/30">
+            <p className='text-sm text-muted-foreground/80 leading-relaxed pt-2 border-t border-border/30'>
               {feature.detailedDescription}
             </p>
           </motion.div>
@@ -178,7 +197,7 @@ const FeatureCard = ({ feature, index }: FeatureCardProps) => {
           {/* Learn More toggle */}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="mt-3 text-xs font-semibold text-cyber-primary hover:text-accent transition-colors flex items-center gap-1"
+            className='mt-3 text-xs font-semibold text-cyber-primary hover:text-accent transition-colors flex items-center gap-1'
           >
             {isExpanded ? "Show Less" : "Learn More"}
             <motion.span
@@ -192,8 +211,8 @@ const FeatureCard = ({ feature, index }: FeatureCardProps) => {
 
         {/* Decorative corner */}
         {feature.highlight && (
-          <div className="absolute top-4 right-4">
-            <span className="px-2 py-1 text-xs font-semibold bg-gradient-to-r from-accent to-cyber-primary text-white rounded-full shadow-lg">
+          <div className='absolute top-4 right-4'>
+            <span className='px-2 py-1 text-xs font-semibold bg-gradient-to-r from-accent to-cyber-primary text-white rounded-full shadow-lg'>
               Featured
             </span>
           </div>
@@ -205,26 +224,26 @@ const FeatureCard = ({ feature, index }: FeatureCardProps) => {
 
 export const FeaturesGrid = () => {
   return (
-    <section id="features" className="py-24 relative">
-      <div className="container mx-auto px-4">
+    <section id='features' className='py-24 relative'>
+      <div className='container mx-auto px-4'>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className='text-center mb-16'
         >
-          <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
-            Powerful <span className="text-primary">Features</span>
+          <h2 className='font-display text-3xl md:text-5xl font-bold mb-4'>
+            Powerful <span className='text-primary'>Features</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className='text-muted-foreground max-w-2xl mx-auto'>
             Everything you need to transform your supply chain into a
             competitive advantage.
           </p>
         </motion.div>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 grid-flow-dense content-center">
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 grid-flow-dense content-center'>
           {features.map((feature, index) => (
             <FeatureCard key={index} feature={feature} index={index} />
           ))}

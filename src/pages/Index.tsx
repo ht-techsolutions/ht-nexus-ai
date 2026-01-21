@@ -15,17 +15,17 @@ import MapSection from "@/components/MapSection";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div className='min-h-screen bg-background text-foreground overflow-x-hidden'>
       <Navbar />
       <HeroSection />
-      <PartnersMarquee />
-      <JourneyTimeline />
       <FeaturesGrid />
+      <JourneyTimeline />
       <IntelligenceHub />
       <Testimonials />
       <PricingSection />
       <MapSection />
       <FAQSection />
+      <PartnersMarquee />
       <ContactSection />
       <Footer />
       <ChatWidget />
