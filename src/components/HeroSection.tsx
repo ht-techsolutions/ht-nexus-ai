@@ -17,8 +17,8 @@ export const HeroSection = () => {
 
       {/* Dynamic Background Glows for Light/Dark */}
       <div className='absolute inset-0 pointer-events-none'>
-        <div className='absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-cyber-primary/10 dark:bg-cyber-primary/20 rounded-full blur-[120px] animate-pulse-glow' />
-        <div className='absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-accent/10 dark:bg-accent/20 rounded-full blur-[120px] animate-pulse-glow delay-500' />
+        <div className='absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-cyber-primary/50 dark:bg-cyber-primary rounded-full blur-[120px] animate-pulse-glow' />
+        <div className='absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-accent/50 dark:bg-accent rounded-full blur-[120px] animate-pulse-glow delay-500' />
       </div>
 
       {/* Content */}
@@ -67,7 +67,7 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className='text-sm md:text-md text-cyber-light/70 max-w-2xl mx-auto mb-10 pointer-events-auto'
+            className='text-sm md:text-md text-cyber-dark/70 dark:text-cyber-light/70 max-w-2xl mx-auto mb-10 pointer-events-auto'
           >
             We empower enterprises to transform complex supply chains into
             intelligent, self-optimizing systems.
