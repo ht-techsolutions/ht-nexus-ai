@@ -264,10 +264,10 @@ export const Navbar = () => {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className={`md:hidden ${theme === "dark" ? "glass-dark" : "glass"} border-t border-cyber-primary/20 absolute left-0 right-0 top-full shadow-xl`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className={`md:hidden ${theme === "dark" ? "bg-black" : "bg-white"} border-t border-cyber-primary/20 absolute left-0 right-0 h-screen top-full shadow-xl`}
           >
             <nav className='container mx-auto px-4 py-6 flex flex-col gap-4'>
               {navLinks.map((link) => {
@@ -279,7 +279,7 @@ export const Navbar = () => {
                     className={`text-left transition-colors py-2 font-medium ${
                       isActive
                         ? "text-accent"
-                        : "text-cyber-light/70 hover:text-cyber-primary"
+                        : "text-cyber-dark/70 dark:text-cyber-light/70 hover:text-cyber-primary"
                     }`}
                   >
                     {link.label}
