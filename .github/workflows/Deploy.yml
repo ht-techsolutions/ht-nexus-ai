@@ -22,8 +22,7 @@ jobs:
         run: npm install
       - name: Build
         env:
-          NODE_ENV: production
-          VITE_RECAPTCHA_SITE_KEY: ${{ env.VITE_RECAPTCHA_SITE_KEY }}
+          VITE_RECAPTCHA_SITE_KEY: ${{ secrets.VITE_RECAPTCHA_SITE_KEY }}
         run: npm run build
       - name: Deploy to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
