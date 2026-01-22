@@ -77,7 +77,7 @@ export const Testimonials = () => {
           <p className='text-muted-foreground max-w-2xl mx-auto'>
             Hundreds of organizations trust{" "}
             <span className='font-bold text-accent'>HT-NEXUS AI</span> to
-            streamline supply chains.{" "}<br/>
+            streamline supply chains. <br />
             <span className='font-bold text-accent'>Global Recognition</span>
           </p>
         </motion.div>
@@ -110,7 +110,7 @@ export const Testimonials = () => {
                       <div className='font-bold text-lg text-foreground tracking-tight'>
                         {testimonial.author}
                       </div>
-                      <div className='text-sm text-cyber-light/60'>
+                      <div className='text-sm text-cyber-dark/70 dark:text-cyber-light/70'>
                         {testimonial.role}, {testimonial.company}
                       </div>
                     </div>

@@ -227,7 +227,7 @@ export const Navbar = () => {
               <Link to='/login'>
                 <RippleButton
                   variant='ghost'
-                  className='text-cyber-light/80 hover:text-cyber-primary'
+                  className='text-cyber-dark/70 dark:text-cyber-light/70 hover:text-cyber-primary'
                 >
                   Login
                 </RippleButton>

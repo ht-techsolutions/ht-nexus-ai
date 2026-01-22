@@ -128,7 +128,7 @@ export const HeroSection = () => {
                 <div className='font-display text-3xl md:text-4xl font-bold text-cyber-primary mb-2 drop-shadow-sm'>
                   {stat.value}
                 </div>
-                <div className='text-sm text-cyber-light/60 dark:text-cyber-light/60 font-medium'>
+                <div className='text-sm text-cyber-dark/70 dark:text-cyber-light/70 font-medium'>
                   {stat.label}
                 </div>
               </div>
@@ -144,7 +144,7 @@ export const HeroSection = () => {
         transition={{ delay: 1 }}
         className='flex flex-col items-center gap-2 z-10'
       >
-        <p className='text-xs uppercase tracking-[0.2em] text-cyber-light'>
+        <p className='text-xs uppercase tracking-[0.2em] text-cyber-dark/70 dark:text-cyber-light/70'>
           Scroll to explore
         </p>
         <button
