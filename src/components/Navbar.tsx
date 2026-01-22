@@ -10,8 +10,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
 const navLinks = [
-  { href: "#journey", label: "Journey" },
   { href: "#features", label: "Features" },
+  { href: "#journey", label: "Journey" },
   { href: "#insights", label: "Insights" },
   { href: "#pricing", label: "Pricing" },
   { href: "#faq", label: "FAQ" },
@@ -48,6 +48,7 @@ export const Navbar = () => {
       observerOptions,
     );
     const sections = [
+      "hero",
       "features",
       "journey",
       "insights",
@@ -124,7 +125,7 @@ export const Navbar = () => {
           ? theme === "dark"
             ? "glass-dark py-3 shadow-lg shadow-background/50"
             : "glass py-3 shadow-lg shadow-background/50"
-          : "bg-transparent py-5"
+          : "bg-white py-5 dark:bg-neutral-900/50"
       }`}
     >
       <div className='container mx-auto px-4 flex items-center justify-between'>
@@ -142,7 +143,7 @@ export const Navbar = () => {
                 className={`transition-colors duration-200 text-sm font-medium relative group ${
                   isActive
                     ? "text-accent"
-                    : "text-cyber-light/70 hover:text-cyber-primary"
+                    : "text-cyber-dark/70 dark:text-cyber-light/70 hover:text-cyber-primary dark:hover:text-cyber-primary"
                 }`}
                 whileHover={{ y: -2 }}
               >
