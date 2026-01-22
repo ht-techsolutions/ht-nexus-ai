@@ -46,12 +46,17 @@ function HexagonBackground({
   return (
     <div
       data-slot='hexagon-background'
-      className={cn("relative size-full overflow-hidden opacity-75 dark:opacity-100", className)}
-      style={{
-        background: "url('/Hero Section.webp')",
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-      }}
+      className={cn(
+        "relative size-full overflow-hidden opacity-75 dark:opacity-100",
+        className,
+      )}
+      style={
+        {
+          // background: "url('/Hero Section.webp')",
+          // backgroundPosition: "center",
+          // backgroundSize: "cover",
+        }
+      }
       {...props}
     >
       <style>{`:root { --hexagon-margin: ${hexagonMargin}px; }`}</style>

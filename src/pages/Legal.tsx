@@ -332,7 +332,10 @@ const Legal = () => {
           </div>
           <div>
             <Link to='/'>
-              <RippleButton variant='ghost' className='flex items-center gap-2 text-cyber-light hover:text-cyber-primary glass border-cyber-primary/10'>
+              <RippleButton
+                variant='ghost'
+                className='flex items-center gap-2 text-cyber-light hover:text-cyber-primary glass border-cyber-primary/10'
+              >
                 <ArrowLeft className='w-4 h-4' />
                 Back to Home
               </RippleButton>
