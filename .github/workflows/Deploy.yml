@@ -17,10 +17,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
       - name: Install Dependencies
         run: npm install
       - name: Build
+        env:
+          NODE_ENV: production
+          VITE_RECAPTCHA_SITE_KEY: ${{ env.VITE_RECAPTCHA_SITE_KEY }}
         run: npm run build
       - name: Deploy to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
