@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useCallback } from "react";
 import {
   Route,
   Shield,
@@ -11,6 +12,16 @@ import {
   Clock,
   DollarSign,
   Activity,
+  Brain,
+  Zap,
+  RefreshCw,
+  Eye,
+  Play,
+  Pause,
+  Sparkles,
+  AlertTriangle,
+  CheckCircle,
+  MapPin,
 } from "lucide-react";
 import {
   AreaChart,
@@ -20,56 +31,29 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  BarChart,
-  Bar,
   PieChart,
   Pie,
   Cell,
+  LineChart,
+  Line,
 } from "recharts";
 
-const statsCards = [
-  {
-    title: "Active Shipments",
-    value: "2,847",
-    change: "+12.5%",
-    trend: "up",
-    icon: Package,
-    color: "from-cyber-primary to-cyber-secondary",
-  },
-  {
-    title: "Routes Optimized",
-    value: "15,234",
-    change: "+8.2%",
-    trend: "up",
-    icon: Route,
-    color: "from-accent to-orange-400",
-  },
-  {
-    title: "Cost Savings",
-    value: "$1.2M",
-    change: "+23.1%",
-    trend: "up",
-    icon: DollarSign,
-    color: "from-green-500 to-emerald-400",
-  },
-  {
-    title: "Avg. Delivery Time",
-    value: "2.3 days",
-    change: "-15.4%",
-    trend: "down",
-    icon: Clock,
-    color: "from-purple-500 to-violet-400",
-  },
+// Initial data
+const initialStatsCards = [
+  { title: "Active Shipments", value: 2847, change: 12.5, trend: "up", icon: Package, color: "from-cyber-primary to-cyber-secondary" },
+  { title: "Routes Optimized", value: 15234, change: 8.2, trend: "up", icon: Route, color: "from-accent to-orange-400" },
+  { title: "Cost Savings", value: 1200000, change: 23.1, trend: "up", icon: DollarSign, color: "from-green-500 to-emerald-400" },
+  { title: "Avg. Delivery Time", value: 2.3, change: -15.4, trend: "down", icon: Clock, color: "from-purple-500 to-violet-400" },
 ];
 
-const shipmentData = [
-  { name: "Mon", shipments: 245, optimized: 220 },
-  { name: "Tue", shipments: 312, optimized: 290 },
-  { name: "Wed", shipments: 287, optimized: 268 },
-  { name: "Thu", shipments: 356, optimized: 340 },
-  { name: "Fri", shipments: 398, optimized: 385 },
-  { name: "Sat", shipments: 234, optimized: 225 },
-  { name: "Sun", shipments: 178, optimized: 172 },
+const initialShipmentData = [
+  { name: "Mon", shipments: 245, optimized: 220, predicted: 250 },
+  { name: "Tue", shipments: 312, optimized: 290, predicted: 315 },
+  { name: "Wed", shipments: 287, optimized: 268, predicted: 295 },
+  { name: "Thu", shipments: 356, optimized: 340, predicted: 360 },
+  { name: "Fri", shipments: 398, optimized: 385, predicted: 405 },
+  { name: "Sat", shipments: 234, optimized: 225, predicted: 240 },
+  { name: "Sun", shipments: 178, optimized: 172, predicted: 185 },
 ];
 
 const regionData = [
@@ -80,72 +64,173 @@ const regionData = [
   { name: "Other", value: 5, color: "#c8e2e1" },
 ];
 
-const recentActivity = [
-  {
-    id: 1,
-    type: "route",
-    message: "Route LA-NYC optimized, saving 23% fuel cost",
-    time: "2 min ago",
-    icon: Route,
-  },
-  {
-    id: 2,
-    type: "compliance",
-    message: "EU shipment #EU-4521 cleared customs",
-    time: "15 min ago",
-    icon: Shield,
-  },
-  {
-    id: 3,
-    type: "fleet",
-    message: "Vehicle #TR-2845 completed delivery",
-    time: "32 min ago",
-    icon: Truck,
-  },
-  {
-    id: 4,
-    type: "alert",
-    message: "Weather delay predicted for Midwest routes",
-    time: "1 hour ago",
-    icon: Activity,
-  },
-  {
-    id: 5,
-    type: "analytics",
-    message: "Weekly performance report generated",
-    time: "2 hours ago",
-    icon: BarChart3,
-  },
+const aiInsights = [
+  { type: "optimization", message: "AI detected 23% fuel savings opportunity on LA-NYC corridor", priority: "high", icon: Zap },
+  { type: "prediction", message: "Demand surge predicted for Q4 holiday season (+34%)", priority: "medium", icon: Brain },
+  { type: "alert", message: "Weather disruption expected in Midwest - 3 routes affected", priority: "high", icon: AlertTriangle },
+  { type: "success", message: "Compliance check passed for EU shipments", priority: "low", icon: CheckCircle },
 ];
 
-const topRoutes = [
-  { route: "Los Angeles → New York", shipments: 1245, efficiency: 94 },
-  { route: "Shanghai → Rotterdam", shipments: 892, efficiency: 91 },
-  { route: "London → Dubai", shipments: 756, efficiency: 89 },
-  { route: "Tokyo → Singapore", shipments: 634, efficiency: 92 },
-  { route: "Mumbai → Frankfurt", shipments: 521, efficiency: 87 },
+const liveShipments = [
+  { id: "SHP-2847", origin: "Los Angeles", destination: "New York", progress: 67, eta: "2h 15m", status: "on-time" },
+  { id: "SHP-2848", origin: "Shanghai", destination: "Rotterdam", progress: 34, eta: "12d 4h", status: "on-time" },
+  { id: "SHP-2849", origin: "London", destination: "Dubai", progress: 89, eta: "45m", status: "delayed" },
+  { id: "SHP-2850", origin: "Tokyo", destination: "Singapore", progress: 12, eta: "3d 8h", status: "on-time" },
 ];
 
 export const DashboardOverview = () => {
+  const [statsCards, setStatsCards] = useState(initialStatsCards);
+  const [shipmentData, setShipmentData] = useState(initialShipmentData);
+  const [isLiveUpdating, setIsLiveUpdating] = useState(true);
+  const [aiProcessing, setAiProcessing] = useState(false);
+  const [currentInsight, setCurrentInsight] = useState(0);
+  const [shipments, setShipments] = useState(liveShipments);
+  const [realtimeMetrics, setRealtimeMetrics] = useState({ predictions: 0, optimizations: 0, alerts: 0 });
+
+  // Simulate real-time data updates
+  useEffect(() => {
+    if (!isLiveUpdating) return;
+
+    const interval = setInterval(() => {
+      // Update stats with small random changes
+      setStatsCards(prev => prev.map(stat => ({
+        ...stat,
+        value: stat.title === "Cost Savings" 
+          ? stat.value + Math.floor(Math.random() * 1000)
+          : stat.title === "Avg. Delivery Time"
+          ? Math.max(1.5, stat.value + (Math.random() - 0.5) * 0.1)
+          : stat.value + Math.floor(Math.random() * 5),
+        change: stat.change + (Math.random() - 0.5) * 0.5
+      })));
+
+      // Update shipment progress
+      setShipments(prev => prev.map(s => ({
+        ...s,
+        progress: Math.min(100, s.progress + Math.random() * 2)
+      })));
+
+      // Update realtime metrics
+      setRealtimeMetrics(prev => ({
+        predictions: prev.predictions + Math.floor(Math.random() * 10),
+        optimizations: prev.optimizations + Math.floor(Math.random() * 5),
+        alerts: prev.alerts + (Math.random() > 0.8 ? 1 : 0)
+      }));
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [isLiveUpdating]);
+
+  // Rotate AI insights
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentInsight(prev => (prev + 1) % aiInsights.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const runAIOptimization = useCallback(() => {
+    setAiProcessing(true);
+    setTimeout(() => {
+      setShipmentData(prev => prev.map(d => ({
+        ...d,
+        optimized: Math.min(d.shipments, d.optimized + Math.floor(Math.random() * 20))
+      })));
+      setAiProcessing(false);
+    }, 2000);
+  }, []);
+
+  const formatValue = (title: string, value: number) => {
+    if (title === "Cost Savings") return `$${(value / 1000000).toFixed(2)}M`;
+    if (title === "Avg. Delivery Time") return `${value.toFixed(1)} days`;
+    return value.toLocaleString();
+  };
+
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Header with Live Toggle */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground">
             Dashboard Overview
           </h1>
           <p className="text-muted-foreground mt-1">
-            Welcome back! Here's what's happening with your logistics.
+            AI-powered logistics intelligence at your fingertips
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <select className="px-3 py-2 rounded-lg bg-cyber-primary/10 border border-cyber-primary/20 text-sm text-foreground">
-            <option>Last 7 days</option>
-            <option>Last 30 days</option>
-            <option>Last 90 days</option>
-          </select>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsLiveUpdating(!isLiveUpdating)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+              isLiveUpdating 
+                ? "bg-green-500/20 text-green-400 border border-green-500/30" 
+                : "bg-muted text-muted-foreground border border-border"
+            }`}
+          >
+            {isLiveUpdating ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
+            {isLiveUpdating ? "Live" : "Paused"}
+          </button>
+          <button
+            onClick={runAIOptimization}
+            disabled={aiProcessing}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyber-primary to-accent text-white font-semibold text-sm disabled:opacity-50"
+          >
+            {aiProcessing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Brain className="w-4 h-4" />}
+            {aiProcessing ? "Optimizing..." : "Run AI Optimization"}
+          </button>
         </div>
+      </div>
+
+      {/* AI Insight Banner */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentInsight}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 10 }}
+          className={`glass rounded-xl p-4 border flex items-center gap-4 ${
+            aiInsights[currentInsight].priority === "high" 
+              ? "border-accent/50 bg-accent/5" 
+              : "border-cyber-primary/30"
+          }`}
+        >
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+            aiInsights[currentInsight].priority === "high" ? "bg-accent/20" : "bg-cyber-primary/20"
+          }`}>
+            {(() => { const Icon = aiInsights[currentInsight].icon; return <Icon className={`w-5 h-5 ${aiInsights[currentInsight].priority === "high" ? "text-accent" : "text-cyber-primary"}`} />; })()}
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-cyber-primary" />
+              <span className="text-xs font-semibold text-cyber-primary uppercase">AI Insight</span>
+            </div>
+            <p className="text-sm text-foreground">{aiInsights[currentInsight].message}</p>
+          </div>
+          <button className="px-4 py-2 rounded-lg bg-cyber-primary/10 text-cyber-primary text-sm font-medium hover:bg-cyber-primary/20 transition-colors">
+            Take Action
+          </button>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Realtime Metrics Bar */}
+      <div className="grid grid-cols-3 gap-4">
+        {[
+          { label: "AI Predictions Today", value: realtimeMetrics.predictions, icon: Brain, color: "text-cyber-primary" },
+          { label: "Routes Optimized", value: realtimeMetrics.optimizations, icon: Route, color: "text-accent" },
+          { label: "Active Alerts", value: realtimeMetrics.alerts, icon: AlertTriangle, color: "text-yellow-400" },
+        ].map((metric, i) => (
+          <motion.div
+            key={metric.label}
+            className="glass rounded-xl p-3 border border-cyber-primary/20 flex items-center gap-3"
+            animate={{ scale: isLiveUpdating ? [1, 1.02, 1] : 1 }}
+            transition={{ duration: 0.3, delay: i * 0.1 }}
+          >
+            <metric.icon className={`w-5 h-5 ${metric.color}`} />
+            <div>
+              <p className="text-lg font-bold text-foreground">{metric.value.toLocaleString()}</p>
+              <p className="text-xs text-muted-foreground">{metric.label}</p>
+            </div>
+          </motion.div>
+        ))}
       </div>
 
       {/* Stats Cards */}
@@ -156,48 +241,105 @@ export const DashboardOverview = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="glass rounded-xl p-5 border border-cyber-primary/20"
+            className="glass rounded-xl p-5 border border-cyber-primary/20 relative overflow-hidden group"
           >
-            <div className="flex items-start justify-between">
+            <div className="flex items-start justify-between relative z-10">
               <div>
                 <p className="text-sm text-muted-foreground">{stat.title}</p>
-                <p className="text-2xl font-bold text-foreground mt-1">
-                  {stat.value}
-                </p>
+                <motion.p 
+                  key={stat.value}
+                  initial={{ scale: 1.1 }}
+                  animate={{ scale: 1 }}
+                  className="text-2xl font-bold text-foreground mt-1"
+                >
+                  {formatValue(stat.title, stat.value)}
+                </motion.p>
                 <div className="flex items-center gap-1 mt-2">
-                  {stat.trend === "up" ? (
+                  {stat.change > 0 ? (
                     <TrendingUp className="w-4 h-4 text-green-500" />
                   ) : (
                     <TrendingDown className="w-4 h-4 text-green-500" />
                   )}
-                  <span className="text-sm text-green-500">{stat.change}</span>
-                  <span className="text-xs text-muted-foreground">
-                    vs last week
-                  </span>
+                  <span className="text-sm text-green-500">{stat.change > 0 ? "+" : ""}{stat.change.toFixed(1)}%</span>
+                  <span className="text-xs text-muted-foreground">vs last week</span>
                 </div>
               </div>
-              <div
-                className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center`}
-              >
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
                 <stat.icon className="w-6 h-6 text-white" />
               </div>
             </div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
           </motion.div>
         ))}
       </div>
 
+      {/* Live Shipments Tracker */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="glass rounded-xl p-5 border border-cyber-primary/20"
+      >
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <h3 className="font-semibold text-foreground">Live Shipment Tracker</h3>
+            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 text-xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              Live
+            </span>
+          </div>
+          <button className="flex items-center gap-2 text-sm text-cyber-primary hover:text-accent transition-colors">
+            <Eye className="w-4 h-4" />
+            View All
+          </button>
+        </div>
+        <div className="space-y-3">
+          {shipments.map((shipment) => (
+            <div key={shipment.id} className="p-3 rounded-lg bg-cyber-primary/5 hover:bg-cyber-primary/10 transition-colors">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-3">
+                  <Truck className="w-4 h-4 text-cyber-primary" />
+                  <span className="font-medium text-foreground">{shipment.id}</span>
+                  <span className="text-sm text-muted-foreground">{shipment.origin} → {shipment.destination}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                    shipment.status === "on-time" ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-400"
+                  }`}>
+                    {shipment.status}
+                  </span>
+                  <span className="text-sm text-muted-foreground">ETA: {shipment.eta}</span>
+                </div>
+              </div>
+              <div className="relative h-2 bg-cyber-primary/10 rounded-full overflow-hidden">
+                <motion.div
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-cyber-primary to-accent rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${shipment.progress}%` }}
+                  transition={{ duration: 0.5 }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Shipments Chart */}
+        {/* Shipments Chart with AI Predictions */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
           className="lg:col-span-2 glass rounded-xl p-5 border border-cyber-primary/20"
         >
-          <h3 className="font-semibold text-foreground mb-4">
-            Shipment Activity
-          </h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-foreground">Shipment Activity & AI Predictions</h3>
+            <div className="flex items-center gap-4 text-xs">
+              <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-cyber-primary" /> Actual</span>
+              <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-accent" /> Optimized</span>
+              <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-purple-400" /> AI Predicted</span>
+            </div>
+          </div>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={shipmentData}>
@@ -214,27 +356,10 @@ export const DashboardOverview = () => {
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e3a3a" />
                 <XAxis dataKey="name" stroke="#6b7280" fontSize={12} />
                 <YAxis stroke="#6b7280" fontSize={12} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#04435c",
-                    border: "1px solid #10879d",
-                    borderRadius: "8px",
-                  }}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="shipments"
-                  stroke="#7fd8dc"
-                  strokeWidth={2}
-                  fill="url(#shipments)"
-                />
-                <Area
-                  type="monotone"
-                  dataKey="optimized"
-                  stroke="#ec6216"
-                  strokeWidth={2}
-                  fill="url(#optimized)"
-                />
+                <Tooltip contentStyle={{ backgroundColor: "#04435c", border: "1px solid #10879d", borderRadius: "8px" }} />
+                <Area type="monotone" dataKey="shipments" stroke="#7fd8dc" strokeWidth={2} fill="url(#shipments)" />
+                <Area type="monotone" dataKey="optimized" stroke="#ec6216" strokeWidth={2} fill="url(#optimized)" />
+                <Line type="monotone" dataKey="predicted" stroke="#a855f7" strokeWidth={2} strokeDasharray="5 5" dot={false} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -247,123 +372,69 @@ export const DashboardOverview = () => {
           transition={{ delay: 0.5 }}
           className="glass rounded-xl p-5 border border-cyber-primary/20"
         >
-          <h3 className="font-semibold text-foreground mb-4">
-            Shipments by Region
-          </h3>
+          <h3 className="font-semibold text-foreground mb-4">Shipments by Region</h3>
           <div className="h-48">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie
-                  data={regionData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={50}
-                  outerRadius={70}
-                  paddingAngle={2}
-                  dataKey="value"
-                >
+                <Pie data={regionData} cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={2} dataKey="value">
                   {regionData.map((entry, index) => (
                     <Cell key={index} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#04435c",
-                    border: "1px solid #10879d",
-                    borderRadius: "8px",
-                  }}
-                />
+                <Tooltip contentStyle={{ backgroundColor: "#04435c", border: "1px solid #10879d", borderRadius: "8px" }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
           <div className="space-y-2 mt-4">
             {regionData.map((region) => (
-              <div
-                key={region.name}
-                className="flex items-center justify-between text-sm"
-              >
+              <div key={region.name} className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2">
-                  <div
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: region.color }}
-                  />
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: region.color }} />
                   <span className="text-muted-foreground">{region.name}</span>
                 </div>
-                <span className="font-medium text-foreground">
-                  {region.value}%
+                <span className="font-medium text-foreground">{region.value}%</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+
+      {/* AI Insights Grid */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="glass rounded-xl p-5 border border-cyber-primary/20"
+      >
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Brain className="w-5 h-5 text-cyber-primary" />
+            <h3 className="font-semibold text-foreground">AI Decision Engine Insights</h3>
+          </div>
+          <span className="text-xs text-muted-foreground">Updated in real-time</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {aiInsights.map((insight, i) => (
+            <motion.div
+              key={i}
+              whileHover={{ scale: 1.02 }}
+              className={`p-4 rounded-xl cursor-pointer transition-all ${
+                insight.priority === "high" 
+                  ? "bg-accent/10 border border-accent/30 hover:border-accent/50" 
+                  : "bg-cyber-primary/5 border border-cyber-primary/20 hover:border-cyber-primary/40"
+              }`}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <insight.icon className={`w-4 h-4 ${insight.priority === "high" ? "text-accent" : "text-cyber-primary"}`} />
+                <span className={`text-xs font-semibold uppercase ${insight.priority === "high" ? "text-accent" : "text-cyber-primary"}`}>
+                  {insight.type}
                 </span>
               </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Bottom Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Activity */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="glass rounded-xl p-5 border border-cyber-primary/20"
-        >
-          <h3 className="font-semibold text-foreground mb-4">Recent Activity</h3>
-          <div className="space-y-4">
-            {recentActivity.map((activity) => (
-              <div
-                key={activity.id}
-                className="flex items-start gap-3 p-3 rounded-lg hover:bg-cyber-primary/5 transition-colors"
-              >
-                <div className="w-8 h-8 rounded-lg bg-cyber-primary/20 flex items-center justify-center flex-shrink-0">
-                  <activity.icon className="w-4 h-4 text-cyber-primary" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-foreground">{activity.message}</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {activity.time}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Top Routes */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-          className="glass rounded-xl p-5 border border-cyber-primary/20"
-        >
-          <h3 className="font-semibold text-foreground mb-4">Top Routes</h3>
-          <div className="space-y-3">
-            {topRoutes.map((route, index) => (
-              <div
-                key={route.route}
-                className="flex items-center gap-3 p-3 rounded-lg hover:bg-cyber-primary/5 transition-colors"
-              >
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyber-primary to-accent flex items-center justify-center text-white font-bold text-sm">
-                  {index + 1}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground truncate">
-                    {route.route}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {route.shipments.toLocaleString()} shipments
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-semibold text-cyber-primary">
-                    {route.efficiency}%
-                  </p>
-                  <p className="text-xs text-muted-foreground">efficiency</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
+              <p className="text-sm text-foreground">{insight.message}</p>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
     </div>
   );
 };

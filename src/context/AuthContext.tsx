@@ -50,9 +50,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.setItem("ht_nexus_token", token);
     // Allow axios interceptor to pick up the token, then fetch user
     const u = await refreshUser();
-    if (u) {
-      toast({ title: "Signed in", description: "Welcome back!" });
-    }
+    // Note: Toast is handled by the calling component (Login.tsx, AuthComplete.tsx)
+    // to avoid duplicate notifications
     return u;
   };
 
