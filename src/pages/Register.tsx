@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { api, hashPassword } from "@/lib/api";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Logo } from "@/components/Logo";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -46,11 +47,18 @@ const Register = () => {
       // Acquire reCAPTCHA v3 token (action: register) if available
       let recaptcha_token: string | null = null;
       const SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
-      if ((window as any).grecaptcha && SITE_KEY) {
+      interface GrecaptchaWindow extends Window {
+        grecaptcha?: {
+          ready: (cb: () => void) => void;
+          execute: (siteKey: string, options: { action: string }) => Promise<string>;
+        };
+      }
+      const grecaptchaWindow = window as GrecaptchaWindow;
+      if (grecaptchaWindow.grecaptcha && SITE_KEY) {
         try {
           await new Promise<void>((resolve) => {
-            (window as any).grecaptcha.ready(async () => {
-              recaptcha_token = await (window as any).grecaptcha.execute(
+            grecaptchaWindow.grecaptcha!.ready(async () => {
+              recaptcha_token = await grecaptchaWindow.grecaptcha!.execute(
                 SITE_KEY,
                 { action: "register" },
               );
@@ -130,16 +138,8 @@ const Register = () => {
         transition={{ duration: 0.5 }}
         className='w-full max-w-lg relative z-10'
       >
-        <div className='text-center mb-8'>
-          <Link to='/' className='inline-flex items-center gap-2 mb-6 group'>
-            <div className='w-10 h-10 rounded-xl bg-cyber-primary/10 flex items-center justify-center border border-cyber-primary/20 group-hover:border-cyber-primary/40 transition-colors'>
-              <Sparkles className='w-5 h-5 text-cyber-primary' />
-            </div>
-            <span className='font-display font-bold text-2xl tracking-tight'>
-              <span className='text-cyber-primary'>HT NEXUS</span>
-              <span className='text-accent ml-1 uppercase'>AI</span>
-            </span>
-          </Link>
+        <div className='text-center flex flex-col items-center mb-8'>
+          <Logo />
           <h1 className='text-3xl font-bold font-display tracking-tight mb-2 text-foreground'>
             Create Account
           </h1>
@@ -156,7 +156,7 @@ const Register = () => {
                   First Name
                 </label>
                 <Input
-                  placeholder='John'
+                  placeholder='Enter your first name'
                   className='bg-white/50 dark:bg-background/30 border-cyber-primary/10 dark:border-cyber-primary/20 focus:border-accent transition-all rounded-xl h-11 text-foreground'
                   value={formData.first_name}
                   onChange={(e) =>
@@ -170,7 +170,7 @@ const Register = () => {
                   Last Name
                 </label>
                 <Input
-                  placeholder='Doe'
+                  placeholder='Enter your last name'
                   className='bg-background/50 border-cyber-primary/20 focus:border-accent transition-all rounded-xl h-11 text-foreground'
                   value={formData.last_name}
                   onChange={(e) =>
@@ -187,7 +187,7 @@ const Register = () => {
               <div className='relative'>
                 <User className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground' />
                 <Input
-                  placeholder='johndoe'
+                  placeholder='Enter your username'
                   className='pl-10 bg-white/50 dark:bg-background/30 border-cyber-primary/10 dark:border-cyber-primary/20 focus:border-accent transition-all rounded-xl h-11 text-foreground'
                   value={formData.username}
                   onChange={(e) =>
@@ -206,7 +206,7 @@ const Register = () => {
                 <Mail className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground' />
                 <Input
                   type='email'
-                  placeholder='john@company.com'
+                  placeholder='Enter your email'
                   className='pl-10 bg-white/50 dark:bg-background/30 border-cyber-primary/10 dark:border-cyber-primary/20 focus:border-accent transition-all rounded-xl h-11 text-foreground'
                   value={formData.email}
                   onChange={(e) =>

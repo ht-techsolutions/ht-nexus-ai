@@ -15,6 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 import { api, hashPassword, API_BASE_URL } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Logo } from "@/components/Logo";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -102,16 +103,8 @@ const Login = () => {
         transition={{ duration: 0.5 }}
         className='w-full max-w-md relative z-10'
       >
-        <div className='text-center mb-8'>
-          <Link to='/' className='inline-flex items-center gap-2 mb-6 group'>
-            <div className='w-10 h-10 rounded-xl bg-cyber-primary/10 flex items-center justify-center border border-cyber-primary/20 group-hover:border-cyber-primary/40 transition-colors'>
-              <Sparkles className='w-5 h-5 text-cyber-primary' />
-            </div>
-            <span className='font-display font-bold text-2xl tracking-tight'>
-              <span className='text-cyber-primary'>HT NEXUS</span>
-              <span className='text-accent ml-1 uppercase'>AI</span>
-            </span>
-          </Link>
+        <div className='text-center flex flex-col items-center mb-8'>
+          <Logo />
           <h1 className='text-3xl font-bold font-display tracking-tight mb-2 text-foreground'>
             Welcome Back
           </h1>
@@ -183,7 +176,7 @@ const Login = () => {
 
           <div className='relative my-8'>
             <div className='absolute inset-0 flex items-center'>
-              <span className='w-full border-t border-border/50'></span>
+              <span className='w-full  border-border/50'></span>
             </div>
             <div className='relative flex justify-center text-xs uppercase'>
               <span className='bg-transparent px-2 text-muted-foreground'>

@@ -77,7 +77,7 @@ export const Testimonials = () => {
           <p className='text-muted-foreground max-w-2xl mx-auto'>
             Hundreds of organizations trust{" "}
             <span className='font-bold text-accent'>HT-NEXUS AI</span> to
-            streamline supply chains.{" "}
+            streamline supply chains.{" "}<br/>
             <span className='font-bold text-accent'>Global Recognition</span>
           </p>
         </motion.div>
