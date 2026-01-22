@@ -42,22 +42,38 @@ export const HeroSection = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className='font-display text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 pointer-events-auto'
           >
-            <span className='text-foreground'>Predict the</span>
+            <span className='text-foreground'>Optimize logistics with </span>
             <br />
-            <span className='bg-gradient-to-r from-primary via-cyber-light to-accent bg-clip-text text-transparent'>
-              Unpredictable.
-            </span>
+            <div className='relative inline-block'>
+              <span className='bg-gradient-to-r from-primary via-cyber-light to-accent bg-clip-text text-transparent'>
+                HT Nexus
+              </span>
+              <span className='absolute top-0 -right-6 text-accent border border-accent w-6 h-6 flex flex-col items-center justify-center text-sm'>
+                AI
+              </span>
+            </div>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className='text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 pointer-events-auto'
+            className='text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-2 pointer-events-auto'
           >
-            The central nervous system for your supply chain. Reduce costs,
-            automate routing, and optimize logistics in real-time with AI-driven
-            insights.
+            Predict, automate, and streamline logistics operations using
+            advanced AI driven intelligence.
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className='text-sm md:text-md text-cyber-light/70 max-w-2xl mx-auto mb-10 pointer-events-auto'
+          >
+            We empower enterprises to transform complex supply chains into
+            intelligent, self-optimizing systems.
+            <cite className='font-bold text-accent'> HT TechSolution </cite>
+            continuously analyzes demand, inventory, routes,and operational data
+            to unlock faster deliveries, lower costs, and smarter decisions
           </motion.p>
 
           {/* CTAs */}
@@ -77,7 +93,7 @@ export const HeroSection = () => {
                 {/* Liquid animation effect */}
                 <span className='absolute inset-0 bg-gradient-to-r from-accent/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
                 <span className='relative flex items-center gap-2'>
-                  Start Free Trial
+                  Begin Trial Here
                   <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
                 </span>
               </RippleButton>
@@ -93,7 +109,7 @@ export const HeroSection = () => {
                 if (el) el.scrollIntoView({ behavior: "smooth" });
               }}
             >
-              Learn More
+              Study More
             </RippleButton>
           </motion.div>
 
@@ -104,9 +120,9 @@ export const HeroSection = () => {
             className='grid grid-cols-3 gap-8  pt-8 border-border/30 dark:border-border/50 pointer-events-auto'
           >
             {[
-              { value: "40%", label: "Cost Reduction" },
-              { value: "99.9%", label: "Uptime SLA" },
-              { value: "150+", label: "Enterprise Clients" },
+              { value: "Up to 40%", label: "Cost Optimization" },
+              { value: "99.9%", label: "Infrastructure Reliability" },
+              { value: "150+", label: "Chain Optimization " },
             ].map((stat, index) => (
               <div key={index} className='text-center'>
                 <div className='font-display text-3xl md:text-4xl font-bold text-cyber-primary mb-2 drop-shadow-sm'>

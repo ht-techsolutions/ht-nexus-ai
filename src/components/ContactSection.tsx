@@ -25,11 +25,23 @@ export const ContactSection = () => {
     try {
       let token: string | null = recaptchaToken;
       const SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
-      if (!token && (window as any).grecaptcha && SITE_KEY) {
+      // Define the grecaptcha type
+      type Grecaptcha = {
+        ready: (cb: () => void) => void;
+        execute: (
+          siteKey: string,
+          options: { action: string },
+        ) => Promise<string>;
+      };
+
+      const grecaptcha = (window as unknown as { grecaptcha?: Grecaptcha })
+        .grecaptcha;
+
+      if (!token && grecaptcha && SITE_KEY) {
         try {
           await new Promise<void>((resolve) => {
-            (window as any).grecaptcha.ready(async () => {
-              token = await (window as any).grecaptcha.execute(SITE_KEY, {
+            grecaptcha.ready(async () => {
+              token = await grecaptcha.execute(SITE_KEY, {
                 action: "contact",
               });
               resolve();
@@ -106,14 +118,16 @@ export const ContactSection = () => {
           className='text-center mb-16'
         >
           <h2 className='font-display text-3xl md:text-5xl font-bold mb-4'>
-            Get in{" "}
+            Ready to unlock
+            <br /> smarter, faster, and more efficient
+            <br />{" "}
             <span className='bg-gradient-to-r from-cyber-light to-accent bg-clip-text text-transparent'>
-              Touch
+              supply chains?
             </span>
           </h2>
           <p className='text-muted-foreground max-w-2xl mx-auto'>
-            Ready to transform your supply chain? Let's discuss how HT-NEXUS AI
-            can help your business.
+            Let's explore how <span className='font-bold'>HT-NEXUS AI</span> can
+            transform your logistics operations.
           </p>
         </motion.div>
 
@@ -126,11 +140,12 @@ export const ContactSection = () => {
             transition={{ duration: 0.6 }}
           >
             <h3 className='font-display text-2xl font-bold mb-6 text-foreground'>
-              Let's Start a Conversation
+              Start the Conversation
             </h3>
             <p className='text-muted-foreground mb-8'>
-              Whether you have questions about our platform, pricing, or want a
-              personalized demo, our team is ready to help.
+              Whether you want a personalized demo, have questions about AI
+              capabilities, or need pricing guidance, our team is here to guide
+              your enterprise.
             </p>
 
             <div className='space-y-6'>

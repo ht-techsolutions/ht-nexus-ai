@@ -16,7 +16,7 @@ export const PartnersMarquee = () => {
           viewport={{ once: true }}
           className='text-center text-sm text-muted-foreground uppercase tracking-widest'
         >
-          Trusted by Industry Leaders
+          Powering Leading Organizations
         </motion.p>
       </div>
 

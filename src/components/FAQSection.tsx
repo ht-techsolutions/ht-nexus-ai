@@ -8,29 +8,33 @@ import {
 
 const faqs = [
   {
-    question: "How does HT-NEXUS AI optimize delivery routes?",
+    question:
+      "How does HT-NEXUS AI improve supply chain forecasting compared to traditional methods?",
     answer:
-      "Our AI algorithms analyze real-time traffic data, historical delivery patterns, weather conditions, and vehicle capacity to generate the most efficient routes possible, reducing fuel consumption and delivery times.",
+      "HT-NEXUS AI leverages machine learning to analyze historical demand patterns, real-time market signals, supplier performance, and external factors such as weather and geopolitical changes. Unlike static spreadsheets or manual forecasting, our platform continuously adapts predictions, helping businesses maintain optimal inventory levels, reduce stockouts, and improve customer satisfaction.",
   },
   {
-    question: "Can I integrate HT-NEXUS AI with my existing ERP system?",
+    question:
+      "Can implementing HT-NEXUS AI significantly reduce logistics and operational costs?",
     answer:
-      "Yes, HT-NEXUS AI is built with a flexible API-first architecture that allows for seamless integration with major ERP and WMS platforms, ensuring your data flows smoothly across your entire supply chain.",
+      "Yes. The platform's predictive route optimization, intelligent inventory management, and automated decision-making help enterprises lower transportation, warehousing, and labor costs. By continuously analyzing operational data, HT-NEXUS AI identifies inefficiencies that human planners might miss, delivering measurable cost reductions and higher overall supply chain performance.",
   },
   {
-    question: "What kind of real-time visibility do I get?",
+    question: "How can we monitor and measure AI performance in real time?",
     answer:
-      "We provide end-to-end tracking for every shipment, with granular updates on location, temperature, and estimated time of arrival. You can monitor your entire global logistics operation from a single dashboard.",
+      "HT-NEXUS AI provides interactive dashboards that display KPIs such as delivery accuracy, inventory turnover, route efficiency, and cost per shipment. Predictive insights, trend analyses, and scenario simulations enable managers to track performance, make proactive adjustments, and validate ROI for every supply chain operation.",
   },
   {
-    question: "How secure is my data on your platform?",
+    question:
+      "Is HT-NEXUS AI suitable for multi-country or global logistics operations?",
     answer:
-      "Security is our top priority. We use enterprise-grade encryption (AES-256) for data at rest and in transit. All sensitive fields, including passwords, are hashed client-side before being sent to our backend.",
+      "Absolutely. The platform is built to handle complex, multi-region supply chains, integrating warehouses, transport networks, and local regulations. Its predictive capabilities optimize global routes, manage inventory distribution across borders, and anticipate disruptions, ensuring seamless, efficient operations worldwide.",
   },
   {
-    question: "What is the implementation timeline?",
+    question:
+      "How does AI help prevent delivery delays and manage unforeseen disruptions?",
     answer:
-      "A typical implementation takes between 2 to 4 weeks, depending on the complexity of your integrations and the volume of data. Our dedicated onboarding team will guide you through every step of the process.",
+      "Using real-time data, predictive analytics, and scenario simulations, HT-NEXUS AI forecasts potential delays caused by traffic, weather, or supply chain bottlenecks. The system automatically suggests corrective actions, such as rerouting shipments or adjusting schedules, minimizing disruptions and ensuring deliveries meet SLA commitments.",
   },
 ];
 
@@ -46,11 +50,11 @@ export const FAQSection = () => {
           className='text-center mb-16'
         >
           <h2 className='font-display text-3xl md:text-5xl font-bold mb-4'>
-            Frequently Asked <span className='text-primary'>Questions</span>
+            <span className='text-primary'>Everything</span> You Need to Know
           </h2>
           <p className='text-muted-foreground max-w-2xl mx-auto'>
-            Everything you need to know about the world's most advanced AI
-            logistics platform.
+            Learn how HT-NEXUS AI powers smarter supply chains, predictive
+            operations, and measurable business impact
           </p>
         </motion.div>
 

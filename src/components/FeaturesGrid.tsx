@@ -234,11 +234,10 @@ export const FeaturesGrid = () => {
           className='text-center mb-16'
         >
           <h2 className='font-display text-3xl md:text-5xl font-bold mb-4'>
-            Powerful <span className='text-primary'>Features</span>
+              <span className='text-accent'>Capabilities</span> That Drive Results
           </h2>
           <p className='text-muted-foreground max-w-2xl mx-auto'>
-            Everything you need to transform your supply chain into a
-            competitive advantage.
+            Smart automation for complex logistics operations
           </p>
         </motion.div>
 

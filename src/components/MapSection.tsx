@@ -48,11 +48,12 @@ const MapSection = () => {
             Global Presence
           </div>
           <h2 className='text-3xl md:text-5xl font-bold font-display mb-4'>
-            Our <span className='text-primary'>Headquarters</span>
+            Powering <span className='text-primary'> Logistics </span>Worldwide
           </h2>
           <p className='text-muted-foreground text-lg max-w-2xl mx-auto'>
-            Visit our global operation centers to learn how we power the world's
-            supply chains.
+            Tour our worldwide offices and see how{" "}
+            <span className='font-bold text-accent'>HT-NEXUS AI</span> powers
+            enterprise logistics.
           </p>
         </motion.div>
 
@@ -79,17 +80,22 @@ const MapSection = () => {
           )}
 
           {/* Floating UI on Map */}
-          <div className='absolute bottom-4 left-4 md:bottom-8 md:left-8 glass-dark p-6 rounded-2xl border-white/10 hidden md:block'>
+          <div className='absolute bottom-4 left-4 md:bottom-8 md:left-8 glass-dark p-6 rounded-2xl border-white/10 hidden md:block max-w-xs shadow-lg shadow-black/20'>
             <div className='flex items-center gap-3 mb-2'>
-              <div className='w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center'>
+              <div className='w-10 h-10 flex-shrink-0 rounded-lg bg-primary/20 flex items-center justify-center'>
                 <MapPin className='w-5 h-5 text-primary' />
               </div>
-              <div>
-                <h4 className='font-bold text-white'>Main Office</h4>
-                <p className='text-xs text-white/60'>Mountain View, CA</p>
+              <div className='w-auto'>
+                <h4 className='font-bold text-white'>
+                  Global Operations Center
+                </h4>
+                <p className='text-xs text-white/60 text-wrap'>
+                  500 Montgomery Street, Suite 1400, San Francisco, CA 94111,
+                  United States
+                </p>
               </div>
             </div>
-            <p className='text-sm text-white/80 max-w-[200px]'>
+            <p className='text-sm text-white/80 '>
               Our tech hub where AI logistics innovation happens every day.
             </p>
           </div>

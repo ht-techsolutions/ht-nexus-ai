@@ -7,43 +7,35 @@ import { MotionCarousel } from "@/components/animate-ui/components/community/mot
 const testimonials = [
   {
     quote:
-      "HT-NEXUS AI transformed our logistics operations. We've seen a 42% reduction in shipping costs and our delivery times improved by 35%.",
-    author: "Sarah Chen",
-    role: "VP of Operations",
-    company: "Global Retail Corp",
+      "HT-NEXUS AI transformed our supply chain visibility and efficiency. With predictive analytics, we reduced logistics costs by 30% and improved on-time delivery rates. The platform’s insights empower our operations team to make smarter, faster decisions every day.",
+    author: "Samantha Lee",
+    role: "Chief Operations Officer",
+    company: "Global Logistics Inc.",
     avatar: "/Sarah.webp",
   },
   {
     quote:
-      "The predictive routing feature alone saved us millions. The AI anticipates delays before they happen, allowing us to proactively reroute shipments.",
-    author: "Marcus Johnson",
-    role: "Supply Chain Director",
-    company: "TechFlow Industries",
+      "Integrating HT-NEXUS AI into our enterprise supply chain was a game-changer. AI-driven route optimization and inventory forecasting have allowed us to scale operations globally while maintaining operational control and cost efficiency.",
+    author: "Rajesh Kumar",
+    role: "VP Supply Chain",
+    company: "TransGlobal Manufacturing",
     avatar: "/Marcus.webp",
   },
   {
     quote:
-      "Implementation was seamless and the ROI was visible within the first quarter. The platform's intelligence grows smarter every day.",
-    author: "Elena Rodriguez",
-    role: "CEO",
-    company: "FastShip Logistics",
+      " The predictive dashboards and scenario simulations gave us the ability to anticipate disruptions and act proactively. HT-NEXUS AI doesn’t just automate, it provides intelligence that drives measurable business outcomes across all logistics operations.",
+    author: "Linda Martinez",
+    role: "Director OmniRetail Enterprises",
+    company: "OmniRetail Enterprises",
     avatar: "/Elena.webp",
   },
   {
     quote:
-      "We've automated 80% of our compliance checks. What used to take days now happens in seconds with complete accuracy.",
-    author: "David Park",
-    role: "Compliance Manager",
-    company: "Continental Freight",
+      "HT-NEXUS AI has become an integral part of our supply chain strategy. From real-time monitoring to actionable insights, it provides the operational intelligence we need to stay competitive in a fast-moving market.",
+    author: "Michael Thompson",
+    role: "Strategy Lead",
+    company: "Apex Manufacturing Group",
     avatar: "/David.webp",
-  },
-  {
-    quote:
-      "The real-time analytics dashboard gives us visibility we never had before. Decision-making is now data-driven and instantaneous.",
-    author: "Amanda Foster",
-    role: "Head of Analytics",
-    company: "Summit Distribution",
-    avatar: "/Amanda.webp",
   },
 ];
 
@@ -77,14 +69,16 @@ export const Testimonials = () => {
           className='text-center mb-16'
         >
           <h2 className='font-display text-3xl md:text-5xl font-bold mb-4'>
-            Global{" "}
             <span className='bg-gradient-to-r from-cyber-light to-accent bg-clip-text text-transparent'>
-              Recognition
-            </span>
+              Recognized
+            </span>{" "}
+            Around the World
           </h2>
           <p className='text-muted-foreground max-w-2xl mx-auto'>
-            Join hundreds of companies that have transformed their supply chain
-            with HT-NEXUS AI.
+            Hundreds of organizations trust{" "}
+            <span className='font-bold text-accent'>HT-NEXUS AI</span> to
+            streamline supply chains.{" "}
+            <span className='font-bold text-accent'>Global Recognition</span>
           </p>
         </motion.div>
 

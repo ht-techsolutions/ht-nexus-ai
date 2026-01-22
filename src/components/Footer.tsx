@@ -93,10 +93,19 @@ export const Footer = () => {
       }
     } catch (error) {
       console.error("Newsletter subscription error:", error);
-      const err: any = error;
-      const msg =
-        err?.response?.data?.message ||
-        "Something went wrong. Please try again.";
+      let msg = "Something went wrong. Please try again.";
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error &&
+        typeof (error as { response?: { data?: { message?: string } } })
+          .response === "object" &&
+        (error as { response?: { data?: { message?: string } } }).response?.data
+          ?.message
+      ) {
+        msg = (error as { response: { data: { message: string } } }).response
+          .data.message;
+      }
       toast({
         variant: "destructive",
         title: "Subscription failed",
@@ -124,8 +133,9 @@ export const Footer = () => {
           <div className=''>
             <Logo />
             <p className='text-muted-foreground text-sm mb-6 max-w-xs leading-relaxed'>
-              Next-generation supply chain intelligence. Built by HT-Tech
-              Solutions for the future of global logistics.
+              HT-NEXUS AI changes supply chain with predictive intelligence,
+              optimizing routes, inventory, and operations for global
+              enterprises.
             </p>
             <div className='flex items-center gap-3'>
               {socialLinks.map((social, index) => {

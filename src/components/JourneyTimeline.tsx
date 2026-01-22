@@ -4,30 +4,30 @@ import { Rocket, Zap, TrendingUp, Crown } from "lucide-react";
 
 const milestones = [
   {
-    year: "2022",
+    year: "2023",
     title: "Inception",
     description:
-      "Founded with a mission to revolutionize supply chain management through AI-driven solutions. Our first algorithms were born.",
+      "Founded to redefine supply chain intelligence using AI. Developed our first predictive logistics and optimization algorithms.",
     icon: Rocket,
     color: "from-cyber-primary to-accent",
     pattern: "route",
     background: "/6.webp",
   },
   {
-    year: "2023",
-    title: "Beta Launch",
+    year: "2024",
+    title: "Beta Platform Launch",
     description:
-      "Launched our beta platform with 25 pilot customers. Achieved 35% average cost reduction in logistics operations.",
+      "Released our beta AI platform with pilot logistics partners, delivering measurable cost reductions and operational efficiency gains.",
     icon: Zap,
     color: "from-cyber-primary to-accent",
     pattern: "network",
     background: "/7.webp",
   },
   {
-    year: "2024",
-    title: "Scale",
+    year: "2025",
+    title: "Global Scale",
     description:
-      "Expanded to serve 150+ enterprise clients globally. Processed over 10 million routing decisions daily.",
+      "Scaled to support 150+ enterprise supply chains worldwide, executing millions of AI-driven routing and inventory decisions daily.",
     icon: TrendingUp,
     color: "from-cyber-primary to-accent",
     pattern: "truck",
@@ -35,9 +35,9 @@ const milestones = [
   },
   {
     year: "Today",
-    title: "AI Dominance",
+    title: "AI Leadership",
     description:
-      "Industry-leading AI platform processing real-time global logistics. Partnered with top Fortune 500 companies.",
+      "An industry-leading AI supply chain platform delivering real-time optimization at global scale, trusted by Fortune 500 enterprises.",
     icon: Crown,
     color: "from-cyber-primary to-accent",
     pattern: "globe",
@@ -68,7 +68,7 @@ export const JourneyTimeline = () => {
           className='text-center mb-16'
         >
           <h2 className='font-display text-3xl md:text-5xl font-bold mb-4'>
-            Our <span className='text-primary'>Journey</span>
+            Our <span className='text-primary'>Evolution</span>
           </h2>
           <p className='text-muted-foreground max-w-2xl mx-auto'>
             From a bold idea to industry leadership — witness our evolution in
