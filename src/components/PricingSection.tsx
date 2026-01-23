@@ -85,10 +85,15 @@ export const PricingSection = () => {
         plan: {
           id: plan.name.toLowerCase(),
           name: plan.name,
-          price: `$${isAnnual ? plan.annualPrice : plan.monthlyPrice}`,
+          monthlyPrice: plan.monthlyPrice,
+          annualPrice: plan.annualPrice,
+          price: plan.monthlyPrice
+            ? `$${isAnnual ? plan.annualPrice : plan.monthlyPrice}`
+            : "Custom Pricing",
           period: "/mo",
           features: plan.features,
         },
+        isAnnual,
       },
     });
   };

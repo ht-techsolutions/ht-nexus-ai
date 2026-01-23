@@ -12,49 +12,61 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { RippleButton } from "@/components/animate-ui/components/buttons/ripple";
+import { Switch } from "@/components/animate-ui/components/radix/switch";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { api } from "@/lib/api";
 
 const plans = [
   {
-    id: "pro",
-    name: "Enterprise Pro",
-    price: "$299",
-    period: "/mo",
+    id: "starter",
+    name: "Starter",
+    monthlyPrice: 299,
+    annualPrice: 249,
     features: [
-      "Unlimited AI Route Optimization",
-      "Real-time Global Tracking",
-      "Advanced Predictive Analytics",
-      "Priority API Access",
-      "24/7 Dedicated Support",
-      "Custom ERP Integrations",
-    ],
-    icon: <Sparkles className='w-6 h-6 text-cyber-primary' />,
-    popular: true,
-  },
-  {
-    id: "standard",
-    name: "Standard Hub",
-    price: "$99",
-    period: "/mo",
-    features: [
-      "1,000 AI Route Requests",
-      "Regional Fleet Tracking",
-      "Basic Analytics Dashboard",
-      "Standard API Support",
-      "Email Support",
+      "Up to 1,000 shipments/month",
+      "Basic route optimization",
+      "Email support",
+      "Standard analytics dashboard",
+      "2 user seats",
     ],
     icon: <Shield className='w-6 h-6 text-accent' />,
     popular: false,
+  },
+  {
+    id: "growth",
+    name: "Growth",
+    monthlyPrice: 799,
+    annualPrice: 649,
+    features: [
+      "Up to 10,000 shipments/month",
+      "Advanced predictive routing",
+      "Priority support 24/7",
+      "Real-time analytics & API access",
+      "10 user seats",
+      "Auto-compliance checks",
+      "Custom integrations",
+    ],
+    icon: <Sparkles className='w-6 h-6 text-cyber-primary' />,
+    popular: true,
   },
 ];
 
 const Checkout = () => {
   const location = useLocation();
-  const checkoutPlan = location.state?.plan || plans[0];
+  const incomingPlan = location.state?.plan;
+  const defaultPlan = plans[0];
+  const initialPlan = incomingPlan
+    ? {
+        ...(plans.find((p) => p.id === incomingPlan.id) ?? defaultPlan),
+        ...incomingPlan,
+      }
+    : defaultPlan;
 
-  const [selectedPlan, setSelectedPlan] = useState(checkoutPlan);
+  const [selectedPlan, setSelectedPlan] = useState(initialPlan);
+  const [isAnnual, setIsAnnual] = useState<boolean>(
+    location.state?.isAnnual ?? false,
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [cardData, setCardData] = useState({
     number: "",
@@ -105,6 +117,19 @@ const Checkout = () => {
       return;
     }
 
+    // Prevent purchase for custom-priced plans
+    if (selectedPlan.monthlyPrice == null) {
+      const contactEl = document.getElementById("contact");
+      contactEl?.scrollIntoView({ behavior: "smooth" });
+      toast({
+        variant: "destructive",
+        title: "Contact Sales",
+        description:
+          "This plan requires custom pricing. Please contact our sales team.",
+      });
+      return;
+    }
+
     // Check if user is authenticated
     const token = localStorage.getItem("ht_nexus_token");
     if (!token) {
@@ -114,7 +139,7 @@ const Checkout = () => {
         description: "Please sign in to complete your purchase.",
       });
       navigate("/login", {
-        state: { returnUrl: "/checkout", plan: selectedPlan },
+        state: { returnUrl: "/checkout", plan: selectedPlan, isAnnual },
       });
       return;
     }
@@ -135,6 +160,7 @@ const Checkout = () => {
 
       const response = await api.post("/subscriptions", {
         plan_slug: selectedPlan.id,
+        billing_cycle: isAnnual ? "annual" : "monthly",
         payment_method: {
           card_number: cardData.number.replace(/\s/g, ""),
           expiry_month: expiryMonth,
@@ -273,12 +299,23 @@ const Checkout = () => {
                   )}
                   <div className='mb-4'>{plan.icon}</div>
                   <h3 className='text-xl font-bold mb-1'>{plan.name}</h3>
-                  <div className='flex items-baseline gap-1 mb-6'>
-                    <span className='text-3xl font-bold'>{plan.price}</span>
-                    <span className='text-muted-foreground text-sm'>
-                      {plan.period}
-                    </span>
-                  </div>
+                  {plan.monthlyPrice ? (
+                    <div className='flex items-baseline gap-1 mb-6'>
+                      <span className='text-3xl font-bold'>{`$${isAnnual ? plan.annualPrice : plan.monthlyPrice}`}</span>
+                      <span className='text-muted-foreground text-sm'>
+                        /mo
+                      </span>
+                      {isAnnual && (
+                        <p className='text-sm text-muted-foreground mt-1'>
+                          Billed annually
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className='flex items-baseline gap-1 mb-6'>
+                      <span className='text-3xl font-bold'>Custom Pricing</span>
+                    </div>
+                  )}
                   <ul className='space-y-3'>
                     {plan.features.slice(0, 4).map((feature, i) => (
                       <li
@@ -330,6 +367,31 @@ const Checkout = () => {
             <div className='glass p-8 rounded-3xl border-cyber-primary/10 sticky top-28 shadow-xl shadow-cyber-primary/5'>
               <h2 className='text-2xl font-bold mb-6'>Order Summary</h2>
 
+              <div className='mb-4'>
+                <div className='flex items-center justify-between gap-4'>
+                  <div className='flex items-center gap-4'>
+                    <span
+                      className={`text-sm ${!isAnnual ? "text-foreground" : "text-muted-foreground"}`}
+                    >
+                      Monthly
+                    </span>
+                    <Switch
+                      checked={isAnnual}
+                      onCheckedChange={setIsAnnual}
+                      className='data-[state=checked]:bg-cyber-primary'
+                    />
+                    <span
+                      className={`text-sm ${isAnnual ? "text-foreground" : "text-muted-foreground"}`}
+                    >
+                      Annual
+                      <span className='ml-2 px-2 py-0.5 text-xs bg-accent/20 text-accent rounded-full'>
+                        Save 20%
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
               <div className='space-y-4 mb-8'>
                 <div className='flex justify-between items-center text-sm'>
                   <span className='text-muted-foreground'>Selected Plan</span>
@@ -337,12 +399,32 @@ const Checkout = () => {
                 </div>
                 <div className='flex justify-between items-center text-sm'>
                   <span className='text-muted-foreground'>Billing Period</span>
-                  <span className='font-semibold'>Monthly</span>
+                  <span className='font-semibold'>
+                    {isAnnual ? "Annual" : "Monthly"}
+                  </span>
                 </div>
                 <div className='w-full border-t border-border/50 my-4' />
                 <div className='flex justify-between items-center text-xl font-bold'>
                   <span>Total</span>
-                  <span className='text-accent'>{selectedPlan.price}</span>
+                  <span className='text-accent'>
+                    {selectedPlan.monthlyPrice == null ? (
+                      "Custom Pricing"
+                    ) : isAnnual ? (
+                      <>
+                        ${selectedPlan.annualPrice * 12}{" "}
+                        <span className='text-sm text-muted-foreground'>
+                          /year
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        ${selectedPlan.monthlyPrice}{" "}
+                        <span className='text-sm text-muted-foreground'>
+                          /month
+                        </span>
+                      </>
+                    )}
+                  </span>
                 </div>
               </div>
 
@@ -429,36 +511,50 @@ const Checkout = () => {
                 </p>
               </div>
 
-              <RippleButton
-                variant='accent'
-                className='w-full h-14 rounded-2xl font-bold text-lg transition-all group overflow-hidden relative'
-                onClick={handleCheckout}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <span className='flex items-center justify-center gap-3'>
-                    <div className='w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin' />
-                    Processing...
-                  </span>
-                ) : (
-                  <span className='flex items-center justify-center gap-2'>
-                    Complete Purchase
-                    <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
-                  </span>
-                )}
-                {/* Logistic Sweep Animation */}
-                {!isLoading && (
-                  <motion.div
-                    className='absolute inset-0 bg-white/20 -skew-x-12 translate-x-[-200%]'
-                    animate={{ translateX: ["-200%", "200%"] }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                  />
-                )}
-              </RippleButton>
+              {selectedPlan.monthlyPrice == null ? (
+                <RippleButton
+                  variant='secondary'
+                  className='w-full h-14 rounded-2xl font-bold text-lg'
+                  onClick={() => {
+                    const contactEl = document.getElementById("contact");
+                    contactEl?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  Contact Sales
+                </RippleButton>
+              ) : (
+                <RippleButton
+                  variant='accent'
+                  className='w-full h-14 rounded-2xl font-bold text-lg transition-all group overflow-hidden relative'
+                  onClick={handleCheckout}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <span className='flex items-center justify-center gap-3'>
+                      <div className='w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin' />
+                      Processing...
+                    </span>
+                  ) : (
+                    <span className='flex items-center justify-center gap-2'>
+                      Complete Purchase
+                      <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
+                    </span>
+                  )}
+
+                  {/* Logistic Sweep Animation */}
+                  {!isLoading && (
+                    <motion.div
+                      className='absolute inset-0 bg-white/20 -skew-x-12 translate-x-[-200%]'
+                      animate={{ translateX: ["-200%", "200%"] }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
+                    />
+                  )}
+                </RippleButton>
+              )}
 
               <div className='mt-6 grid grid-cols-2 gap-4'>
                 <div className='flex flex-col items-center gap-1 text-[10px] text-muted-foreground'>
