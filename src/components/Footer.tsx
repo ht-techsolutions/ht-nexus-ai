@@ -51,11 +51,11 @@ const socialLinks = [
 const citationLinks = [
   {
     label: "F6S",
-    href: "https://ht-techsolutions.com",
+    href: "https://www.f6s.com/ht-techsolution",
   },
   {
     label: "Crunchbase",
-    href: "https://ht-techsolutions.com",
+    href: "https://www.crunchbase.com/organization/ht-techsolution",
   },
 ];
 
