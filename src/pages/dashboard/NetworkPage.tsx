@@ -378,8 +378,8 @@ export const NetworkPage = () => {
           <h3 className='font-semibold text-foreground mb-4'>
             Network by Region
           </h3>
-          <div className='flex items-center gap-6'>
-            <div className='h-48 w-48 flex-shrink-0'>
+          <div className='flex items-center flex-wrap gap-6'>
+            <div className='h-48 w-48  flex-shrink-0'>
               <ResponsiveContainer width='100%' height='100%'>
                 <PieChart>
                   <Pie

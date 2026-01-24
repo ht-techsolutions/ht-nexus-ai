@@ -22,7 +22,7 @@ export const HeroSection = () => {
       </div>
 
       {/* Content */}
-      <div className='container mx-auto px-4 py-24 sm:py-8 relative z-10 pointer-events-none'>
+      <div className='container mx-auto px-4 py-24 lg:py-8 relative z-10 pointer-events-none'>
         <div className='max-w-4xl mx-auto text-center'>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

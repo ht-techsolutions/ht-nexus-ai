@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Truck,
   Wrench,
@@ -37,7 +37,23 @@ import {
 } from "recharts";
 import { useToast } from "@/hooks/use-toast";
 
-const initialVehicles = [
+type Vehicle = {
+  id: string;
+  status: string;
+  location: string;
+  fuel: number;
+  battery: number;
+  temp: number;
+  speed: number;
+  nextMaintenance: string;
+  driver: string;
+  cargo: string;
+  lat: number;
+  lng: number;
+  isNew?: boolean;
+};
+
+const initialVehicles: Vehicle[] = [
   {
     id: "TR-2845",
     status: "active",
@@ -156,9 +172,24 @@ export const FleetPage = () => {
 
   const [isTracking, setIsTracking] = useState(true);
   const [isAddOpen, setIsAddOpen] = useState(false);
-  const [vehicleDetails, setVehicleDetails] = useState<any | null>(null);
-  const [vehicleSettings, setVehicleSettings] = useState<any | null>(null);
+  type AddForm = {
+    id: string;
+    location: string;
+    driver: string;
+    cargo: string;
+    status: string;
+    error: string;
+    lastFocused?: "id" | "location" | "driver" | "cargo" | "status" | null;
+  };
+  const [vehicleDetails, setVehicleDetails] = useState<Vehicle | null>(null);
+  const [vehicleSettings, setVehicleSettings] = useState<Vehicle | null>(null);
   const { toast } = useToast();
+
+  // Local input refs are created and passed to the form component; the form manages its own draft and focus
+  const idRef = useRef<HTMLInputElement | null>(null);
+  const locationRef = useRef<HTMLInputElement | null>(null);
+  const driverRef = useRef<HTMLInputElement | null>(null);
+  const cargoRef = useRef<HTMLInputElement | null>(null);
 
   // Simulate live updates
   useEffect(() => {
@@ -207,10 +238,11 @@ export const FleetPage = () => {
     location?: string;
     driver?: string;
     cargo?: string;
+    status?: string;
   }) => {
-    const newV = {
+    const newV: Vehicle & { isNew?: boolean } = {
       id: payload.id,
-      status: "active",
+      status: payload.status || (payload.id ? "active" : "idle"),
       location: payload.location || "Unknown",
       fuel: 100,
       battery: 100,
@@ -221,9 +253,26 @@ export const FleetPage = () => {
       cargo: payload.cargo || "None",
       lat: 0,
       lng: 0,
-    } as any;
+      isNew: true,
+    };
+
     setVehicles((prev) => [newV, ...prev]);
+
+    // Remove the 'isNew' highlight after a short interval
+    setTimeout(() => {
+      setVehicles((prev) =>
+        prev.map((v) => (v.id === newV.id ? { ...v, isNew: false } : v)),
+      );
+    }, 6000);
+
+    // Clear any saved draft and close
+    try {
+      sessionStorage.removeItem("fleet.addForm");
+    } catch (e) {
+      /* ignore */
+    }
     setIsAddOpen(false);
+
     toast({
       title: "Vehicle added",
       description: `${payload.id} has been added to fleet`,
@@ -246,78 +295,202 @@ export const FleetPage = () => {
     toast({ title: "Tracking", description: `Now tracking ${id}` });
   };
 
-  const openVehicleDetails = (v: any) => setVehicleDetails(v);
+  const openVehicleDetails = (v: Vehicle) => setVehicleDetails(v);
   const closeVehicleDetails = () => setVehicleDetails(null);
-  const openVehicleSettings = (v: any) => setVehicleSettings(v);
+  const openVehicleSettings = (v: Vehicle) => setVehicleSettings(v);
   const closeVehicleSettings = () => setVehicleSettings(null);
 
-  // Simple Add Vehicle form
+  // Self-contained Add Vehicle form: manages its own local state, persistence and focus
   const AddVehicleForm = ({
+    idRef,
+    locationRef,
+    driverRef,
+    cargoRef,
     onAdd,
     onCancel,
   }: {
+    idRef?: React.RefObject<HTMLInputElement>;
+    locationRef?: React.RefObject<HTMLInputElement>;
+    driverRef?: React.RefObject<HTMLInputElement>;
+    cargoRef?: React.RefObject<HTMLInputElement>;
     onAdd: (payload: {
       id: string;
       location?: string;
       driver?: string;
       cargo?: string;
+      status?: string;
     }) => void;
     onCancel: () => void;
   }) => {
-    const [id, setId] = useState("");
-    const [location, setLocation] = useState("");
-    const [driver, setDriver] = useState("");
-    const [cargo, setCargo] = useState("");
+    const [form, setForm] = useState<AddForm>({
+      id: "",
+      location: "",
+      driver: "",
+      cargo: "",
+      status: "active",
+      error: "",
+      lastFocused: null,
+    });
+    const lastFocusedRef = useRef<AddForm["lastFocused"]>(null);
+
+    // Rehydrate draft on mount
+    useEffect(() => {
+      try {
+        const raw = sessionStorage.getItem("fleet.addForm");
+        if (raw) {
+          const parsed = JSON.parse(raw) as AddForm;
+          setForm(parsed);
+          // restore focus only if we have a lastFocused field
+          if (parsed.lastFocused) {
+            setTimeout(() => {
+              const refMap = {
+                id: idRef,
+                location: locationRef,
+                driver: driverRef,
+                cargo: cargoRef,
+              } as const;
+              const r = refMap[parsed.lastFocused as keyof typeof refMap];
+              r?.current?.focus();
+            }, 0);
+          }
+        }
+      } catch (e) {
+        console.warn("Failed to restore add form draft", e);
+      }
+    }, [idRef, locationRef, driverRef, cargoRef]);
+
+    // Persist draft on changes; only persists locally (no parent updates)
+    useEffect(() => {
+      try {
+        const toSave = {
+          ...form,
+          lastFocused: lastFocusedRef.current ?? form.lastFocused ?? null,
+        };
+        sessionStorage.setItem("fleet.addForm", JSON.stringify(toSave));
+      } catch (e) {
+        console.warn("Failed to persist add form draft", e);
+      }
+    }, [form]);
+
+    const handleChange = (k: keyof AddForm, v: string) =>
+      setForm((s) => ({ ...s, [k]: v }) as AddForm);
+    const handleFieldFocus = (f: AddForm["lastFocused"]) => {
+      lastFocusedRef.current = f;
+    };
+
+    const handleAdd = () => {
+      if (!form.id.trim()) {
+        setForm((s) => ({ ...s, error: "Vehicle ID is required" }));
+        return;
+      }
+      onAdd({
+        id: form.id.trim(),
+        location: form.location.trim(),
+        driver: form.driver.trim(),
+        cargo: form.cargo.trim(),
+        status: form.status,
+      });
+      try {
+        sessionStorage.removeItem("fleet.addForm");
+      } catch (e) {
+        /* ignore */
+      }
+    };
 
     return (
-      <div className='space-y-3'>
+      <div
+        className='space-y-3'
+        onKeyDown={(e) => {
+          if (e.key === "Enter") handleAdd();
+        }}
+      >
         <div>
-          <label className='text-sm'>Vehicle ID</label>
+          <label className='text-sm'>
+            Vehicle ID{" "}
+            <span className='text-xs text-muted-foreground'>(required)</span>
+          </label>
           <input
-            value={id}
-            onChange={(e) => setId(e.target.value)}
+            ref={idRef}
+            value={form.id}
+            onFocus={() => handleFieldFocus("id")}
+            onChange={(e) => handleChange("id", e.target.value)}
+            placeholder='e.g. TR-1234'
             className='w-full mt-1 p-2 rounded-md bg-cyber-primary/5 border border-cyber-primary/10'
           />
         </div>
         <div>
           <label className='text-sm'>Location</label>
           <input
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            ref={locationRef}
+            value={form.location}
+            onFocus={() => handleFieldFocus("location")}
+            onChange={(e) => handleChange("location", e.target.value)}
+            placeholder='City, State'
             className='w-full mt-1 p-2 rounded-md bg-cyber-primary/5 border border-cyber-primary/10'
           />
+        </div>
+        <div className='grid grid-cols-2 gap-2'>
+          <div>
+            <label className='text-sm'>Driver</label>
+            <input
+              ref={driverRef}
+              value={form.driver}
+              onFocus={() => handleFieldFocus("driver")}
+              onChange={(e) => handleChange("driver", e.target.value)}
+              placeholder='Driver name'
+              className='w-full mt-1 p-2 rounded-md bg-cyber-primary/5 border border-cyber-primary/10'
+            />
+          </div>
+          <div>
+            <label className='text-sm'>Cargo</label>
+            <input
+              ref={cargoRef}
+              value={form.cargo}
+              onFocus={() => handleFieldFocus("cargo")}
+              onChange={(e) => handleChange("cargo", e.target.value)}
+              placeholder='Cargo description'
+              className='w-full mt-1 p-2 rounded-md bg-cyber-primary/5 border border-cyber-primary/10'
+            />
+          </div>
         </div>
         <div>
-          <label className='text-sm'>Driver</label>
-          <input
-            value={driver}
-            onChange={(e) => setDriver(e.target.value)}
+          <label className='text-sm'>Status</label>
+          <select
+            value={form.status}
+            onFocus={() => handleFieldFocus("status")}
+            onChange={(e) => handleChange("status", e.target.value)}
             className='w-full mt-1 p-2 rounded-md bg-cyber-primary/5 border border-cyber-primary/10'
-          />
-        </div>
-        <div>
-          <label className='text-sm'>Cargo</label>
-          <input
-            value={cargo}
-            onChange={(e) => setCargo(e.target.value)}
-            className='w-full mt-1 p-2 rounded-md bg-cyber-primary/5 border border-cyber-primary/10'
-          />
-        </div>
-        <div className='flex items-center justify-end gap-2 pt-2'>
-          <button
-            onClick={onCancel}
-            className='px-3 py-1 rounded-md bg-cyber-primary/10'
           >
-            Cancel
-          </button>
-          <button
-            onClick={() =>
-              onAdd({ id: id || `TR-${Date.now()}`, location, driver, cargo })
-            }
-            className='px-3 py-1 rounded-md bg-cyber-primary text-white'
-          >
-            Add
-          </button>
+            <option value='active'>Active</option>
+            <option value='idle'>Idle</option>
+            <option value='maintenance'>Maintenance</option>
+            <option value='offline'>Offline</option>
+          </select>
+        </div>
+
+        {form.error && <p className='text-xs text-red-400'>{form.error}</p>}
+
+        <div className='flex items-center justify-between pt-2'>
+          <div className='text-xs text-muted-foreground'>
+            Preview: <span className='font-medium'>{form.id || "—"}</span> •{" "}
+            <span className='font-medium'>{form.status}</span> •{" "}
+            <span className='font-medium'>{form.location || "—"}</span>
+          </div>
+          <div className='flex items-center gap-2'>
+            <button
+              onClick={onCancel}
+              className='px-3 py-1 rounded-md bg-cyber-primary/10'
+            >
+              Cancel
+            </button>
+            <button
+              disabled={!form.id.trim()}
+              onClick={handleAdd}
+              className={`px-3 py-1 rounded-md ${!form.id.trim() ? "bg-muted text-muted-foreground cursor-not-allowed" : "bg-cyber-primary text-white"}`}
+            >
+              Add
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -642,7 +815,7 @@ export const FleetPage = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className={`hover:bg-cyber-primary/5 cursor-pointer ${selectedVehicle === v.id ? "bg-cyber-primary/10" : ""}`}
+                    className={`hover:bg-cyber-primary/5 cursor-pointer ${selectedVehicle === v.id ? "bg-cyber-primary/10" : ""} ${v.isNew ? "ring-2 ring-cyber-primary/30" : ""}`}
                     onClick={() =>
                       setSelectedVehicle(selectedVehicle === v.id ? null : v.id)
                     }
@@ -653,7 +826,14 @@ export const FleetPage = () => {
                           <Truck className='w-5 h-5 text-cyber-primary' />
                         </div>
                         <div>
-                          <p className='font-medium text-foreground'>{v.id}</p>
+                          <p className='font-medium text-foreground'>
+                            {v.id}
+                            {v.isNew && (
+                              <span className='ml-2 inline-flex items-center text-xs font-semibold bg-cyber-primary text-white px-2 py-0.5 rounded-full'>
+                                New
+                              </span>
+                            )}
+                          </p>
                           <p className='text-xs text-muted-foreground'>
                             {v.cargo}
                           </p>
@@ -762,6 +942,7 @@ export const FleetPage = () => {
               onClick={() => setIsAddOpen(false)}
             />
             <motion.div
+              onClick={(e) => e.stopPropagation()}
               initial={{ scale: 0.98 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.98 }}
@@ -769,6 +950,10 @@ export const FleetPage = () => {
             >
               <h3 className='text-lg font-semibold mb-3'>Add Vehicle</h3>
               <AddVehicleForm
+                idRef={idRef}
+                locationRef={locationRef}
+                driverRef={driverRef}
+                cargoRef={cargoRef}
                 onAdd={(payload) => addVehicle(payload)}
                 onCancel={() => setIsAddOpen(false)}
               />
