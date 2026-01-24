@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -50,7 +50,10 @@ const Register = () => {
       interface GrecaptchaWindow extends Window {
         grecaptcha?: {
           ready: (cb: () => void) => void;
-          execute: (siteKey: string, options: { action: string }) => Promise<string>;
+          execute: (
+            siteKey: string,
+            options: { action: string },
+          ) => Promise<string>;
         };
       }
       const grecaptchaWindow = window as GrecaptchaWindow;
@@ -100,6 +103,11 @@ const Register = () => {
     }
   };
 
+  useEffect(() => {
+    // Ensure page is at the top when visiting the register page
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, []);
+
   return (
     <div className='min-h-screen flex items-center justify-center p-4 bg-background relative overflow-hidden'>
       {/* Background Glows */}
@@ -136,7 +144,7 @@ const Register = () => {
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className='w-full max-w-lg relative z-10'
+        className='w-full mt-20 sm:mt-0 max-w-lg relative z-10'
       >
         <div className='text-center flex flex-col items-center mb-8'>
           <Logo />

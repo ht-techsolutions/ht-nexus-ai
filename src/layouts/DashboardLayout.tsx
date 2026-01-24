@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
@@ -20,8 +20,14 @@ export const DashboardLayout = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Scroll to top when navigating between dashboard routes
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location.pathname]);
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className='min-h-screen bg-background'>
       {/* Sidebar */}
       <DashboardSidebar
         isOpen={sidebarOpen}
@@ -40,14 +46,14 @@ export const DashboardLayout = () => {
       <main
         className={cn(
           "pt-16 min-h-screen transition-all duration-300",
-          sidebarOpen ? "md:pl-[260px]" : "md:pl-[76px]"
+          sidebarOpen ? "md:pl-[260px]" : "md:pl-[76px]",
         )}
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="p-4 md:p-6 lg:p-8"
+          className='p-4 md:p-6 lg:p-8'
         >
           <Outlet />
         </motion.div>

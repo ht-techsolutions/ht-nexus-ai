@@ -19,8 +19,8 @@ const plans = [
     name: "Starter",
     description:
       "Perfect for small businesses getting started with AI logistics.",
-    monthlyPrice: 299,
-    annualPrice: 249,
+    monthlyPrice: 49,
+    annualPrice: 40,
     features: [
       "Up to 1,000 shipments/month",
       "Basic route optimization",
@@ -28,14 +28,14 @@ const plans = [
       "Standard analytics dashboard",
       "2 user seats",
     ],
-    cta: "Start Free Trial",
+    cta: "Get Started",
     popular: false,
   },
   {
     name: "Growth",
     description: "For growing companies that need advanced automation.",
-    monthlyPrice: 799,
-    annualPrice: 649,
+    monthlyPrice: 99,
+    annualPrice: 90,
     features: [
       "Up to 10,000 shipments/month",
       "Advanced predictive routing",
@@ -45,7 +45,7 @@ const plans = [
       "Auto-compliance checks",
       "Custom integrations",
     ],
-    cta: "Start Free Trial",
+    cta: "Get Started",
     popular: true,
   },
   {

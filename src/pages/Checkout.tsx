@@ -21,8 +21,8 @@ const plans = [
   {
     id: "starter",
     name: "Starter",
-    monthlyPrice: 299,
-    annualPrice: 249,
+    monthlyPrice: 49,
+    annualPrice: 40,
     features: [
       "Up to 1,000 shipments/month",
       "Basic route optimization",
@@ -36,8 +36,8 @@ const plans = [
   {
     id: "growth",
     name: "Growth",
-    monthlyPrice: 799,
-    annualPrice: 649,
+    monthlyPrice: 99,
+    annualPrice: 90,
     features: [
       "Up to 10,000 shipments/month",
       "Advanced predictive routing",
@@ -302,9 +302,7 @@ const Checkout = () => {
                   {plan.monthlyPrice ? (
                     <div className='flex items-baseline gap-1 mb-6'>
                       <span className='text-3xl font-bold'>{`$${isAnnual ? plan.annualPrice : plan.monthlyPrice}`}</span>
-                      <span className='text-muted-foreground text-sm'>
-                        /mo
-                      </span>
+                      <span className='text-muted-foreground text-sm'>/mo</span>
                       {isAnnual && (
                         <p className='text-sm text-muted-foreground mt-1'>
                           Billed annually

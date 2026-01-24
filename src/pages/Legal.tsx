@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { DialogContent } from "@/components/animate-ui/components/radix/dialog";
 import { RippleButton } from "@/components/animate-ui/components/buttons/ripple";
@@ -217,7 +218,7 @@ const privacyPolicy = `
 <p>By email: support@ht-techsolutions.com</p>
 </li>
 <li>
-<p>By visiting this page on our website: <a href="https://ht-techsolutions.com/#contact" rel="external nofollow noopener" target="_blank">https://ht-techsolutions.com/#contact</a></p>
+<p>By visiting this page on our website: <a href="/#contact">https://ht-techsolutions.com/#contact</a></p>
 </li>
 </ul>
 `;
@@ -308,7 +309,7 @@ You agree that the original English text shall prevail in the case of a dispute.
 <p>By email: support@ht-techsolutions.com</p>
 </li>
 <li>
-<p>By visiting this page on our website: <a href="https://ht-techsolutions.com/#contact" rel="external nofollow noopener" target="_blank">https://ht-techsolutions.com/#contact</a></p>
+<p>By visiting this page on our website: <a href="/#contact">https://ht-techsolutions.com/#contact</a></p>
 </li>
 </ul>
 `;
@@ -317,6 +318,11 @@ const Legal = () => {
   const { type } = useParams<{ type?: "privacy" | "terms" }>();
   const content = type === "privacy" ? privacyPolicy : termsConditions;
   const title = type === "privacy" ? "Privacy Policy" : "Terms & Conditions";
+
+  useEffect(() => {
+    // Ensure page is at the top when visiting or switching between legal pages
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [type]);
 
   return (
     <div className='min-h-screen bg-background text-foreground'>

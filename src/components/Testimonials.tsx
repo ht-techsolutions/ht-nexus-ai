@@ -11,7 +11,7 @@ const testimonials = [
     author: "Samantha Lee",
     role: "Chief Operations Officer",
     company: "Global Logistics Inc.",
-    avatar: "/Sarah.webp",
+    avatar: "/Samantha.webp",
   },
   {
     quote:
@@ -19,7 +19,7 @@ const testimonials = [
     author: "Rajesh Kumar",
     role: "VP Supply Chain",
     company: "TransGlobal Manufacturing",
-    avatar: "/Marcus.webp",
+    avatar: "/Rajesh.webp",
   },
   {
     quote:
@@ -27,7 +27,7 @@ const testimonials = [
     author: "Linda Martinez",
     role: "Director OmniRetail Enterprises",
     company: "OmniRetail Enterprises",
-    avatar: "/Elena.webp",
+    avatar: "/Linda.webp",
   },
   {
     quote:
@@ -35,7 +35,7 @@ const testimonials = [
     author: "Michael Thompson",
     role: "Strategy Lead",
     company: "Apex Manufacturing Group",
-    avatar: "/David.webp",
+    avatar: "/Michael.webp",
   },
 ];
 
